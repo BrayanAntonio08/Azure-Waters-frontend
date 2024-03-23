@@ -1,0 +1,47 @@
+* {
+    margin: 0;
+    padding: 0;
+  }
+
+  img{
+    float: left;
+    margin-right: 20px;
+    width: 370px;
+    height: 290px;
+  }
+  .main-container {
+    padding: 20px;
+  }
+  
+
+  .welcome {
+    margin-bottom: 20px;
+  }
+  
+  .welcome h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .welcome p {
+    font-size: 16px;
+    line-height: 1.5;
+    padding: 3%;
+  }
+
+  .welcome {
+    display: flex;
+    flex-direction: column;
+    align-items: right;
+  }
+  
+  .welcome h2 {
+    margin-bottom: 10px;
+  }
+
+  .footer-container {
+    color: black;
+    padding: 10px;
+    text-align: right;
+    margin-top: 80px;
+  }
