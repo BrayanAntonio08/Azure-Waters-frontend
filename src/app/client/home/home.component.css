@@ -1,0 +1,19 @@
+.welcome {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+}
+
+.welcome img {
+  flex: 0 0 auto;
+  margin-right: 20px;
+  width: 400px; 
+  height: auto;
+}
+
+.welcome-text {
+  flex: 1;
+  text-align: justify;
+  padding: 3%;
+  font-size: 18px;
+}
