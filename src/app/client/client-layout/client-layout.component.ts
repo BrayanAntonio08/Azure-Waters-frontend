@@ -1,21 +1,30 @@
 import { Component } from '@angular/core';
 import { ClientNavbarComponent } from '../client-navbar/client-navbar.component';
 import { RouterOutlet } from '@angular/router';
+import { AdvertisementComponent } from '../advertisement/advertisement.component';
 
 @Component({
   selector: 'app-client-layout',
   standalone: true,
-  imports: [ClientNavbarComponent, RouterOutlet],
+  imports: [ClientNavbarComponent, AdvertisementComponent, RouterOutlet],
   template: `
-    <header>
+    <header class="d-flex align-items-center">
       <img
-        src="https://img.freepik.com/vector-premium/ilustracion-simple-logotipo-hotel_434503-736.jpg?w=2000"
+        src="assets/img/logo.png"
       />
       <h3 class="text-white">Hotel Azure Waters</h3>
     </header>
     <main class="container-fluid d-flex">
-      <app-client-navbar />
-      <router-outlet />
+      <div class="d-flex flex-column d-none d-sm-flex col-sm-3 col-md-2">
+        <app-client-navbar />
+        <div style="margin-top: 150px;">
+          <!--espacio vertical-->
+          <app-advertisement />
+        </div>
+      </div>
+      <div class="col">
+        <router-outlet />
+      </div>
     </main>
   `,
   styles: `
@@ -27,9 +36,9 @@ import { RouterOutlet } from '@angular/router';
     display: flex;
 
     img{
-      width: 40px;
-      height: 40px;
-      margin-right:50px;
+      width: 45px;
+      height: 45px;
+      margin-right:30px;
     }
   }
   `,
