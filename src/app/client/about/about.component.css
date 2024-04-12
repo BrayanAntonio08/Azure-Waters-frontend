@@ -32,21 +32,30 @@
   }
   
   .large-image {
-    flex: 1; 
-    margin-right: 10px; 
+    margin: auto;
+    width: 95%;
+  }
+  .large-image img{
+    width: 100%;
+    height: auto;
   }
   
   .small-images {
-    display: flex;
-    flex-wrap: wrap; 
-    flex: 4; 
-    justify-content: space-between;
+    max-height: 380px;
+    overflow-y: auto;
   }
   
   .image {
-    flex-basis: calc(33.33% - 10px); 
-    margin-bottom: 10px; 
-    height: 171px;
+    height: 100px;
+    width: 100px;
+    margin: 3px;
+  }
+  .image img{
+    border-radius: 5px;
+    object-fit: cover;
+  }
+  image img:hover{
+    cursor: pointer;
   }
   
   .image img {
