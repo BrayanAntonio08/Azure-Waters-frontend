@@ -7,7 +7,6 @@ import { LocationComponent } from './location/location.component';
 import { RatesComponent } from './rates/rates.component';
 import { BookRoomComponent } from './book-room/book-room.component';
 import { ContactComponent } from './contact/contact.component';
-import { LoginPageComponent } from '../auth/login-page/login-page.component';
 
 export const CLIENT_ROUTES: Routes = [
   {
@@ -21,7 +20,6 @@ export const CLIENT_ROUTES: Routes = [
       {path:'rates', component:RatesComponent},
       {path:'book', component:BookRoomComponent},
       {path:'contact', component:ContactComponent},
-      {path:'login', component:LoginPageComponent}
     ]
   },
 ];
