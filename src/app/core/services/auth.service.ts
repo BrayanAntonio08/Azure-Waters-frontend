@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
@@ -7,14 +8,20 @@ import { Observable, of } from 'rxjs';
 export class AuthService {
 
   active: boolean = false;
+  private url: string;
 
-  constructor() { }
+  constructor(private http: HttpClient) { 
+    this.url = "https://rickandmortyapi.com/api/character";
+  }
 
   login(){
     this.active = true;
   }
 
   isAdminActive():boolean{
+    this.http.get(this.url).subscribe((response: any) =>{
+      console.log(response);
+    })
     return this.active;
   }
 }

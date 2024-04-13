@@ -1,3 +1,98 @@
 <h1>Reservar habitación</h1>
+<div class="container">
+    <!-- Se debe crear una estructura de "estados" donde se valide una variable para saber el paso en el que está el proceso -->
+    @switch(estado){
+    @case ("booking") {
+    <h3>Habitación disponible</h3>
+    <div class="row mb-2">
+        <div class="col-12 col-md-3 d-flex justify-content-center">
+            IMAGEN
+        </div>
+        <div class="col-12 col-md-9">
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eos in magni velit cum tempora amet soluta tempore
+            nostrum excepturi accusantium iure laudantium corrupti dolorum beatae ipsam, repellendus iusto fugiat rerum?
+        </div>
+    </div>
+    <div class="col-12 col-sm-10 col-md-7">
+        <p class="mb-5 mt-2"><b>Mónto de reservación: $AAA</b></p>
 
-<!-- Se debe crear una estructura de "estados" donde se valide una variable para saber el paso en el que está el proceso -->
+        <div class="row mb-2 align-items-center">
+            <label class="form-label col-5">Identificación: </label>
+            <div class="col-7">
+                <input type="text" [(ngModel)]="cliente.id" class="form-control border-secondary-subtle">
+            </div>
+        </div>
+        <div class="row mb-2 align-items-center">
+            <label class="form-label col-5">Nombre: </label>
+            <div class="col-7">
+                <input type="text" [(ngModel)]="cliente.name" class="form-control border-secondary-subtle">
+            </div>
+        </div>
+        <div class="row mb-2 align-items-center">
+            <label class="form-label col-5">Apellidos: </label>
+            <div class="col-7">
+                <input type="text" [(ngModel)]="cliente.lastName" class="form-control border-secondary-subtle">
+            </div>
+        </div>
+        <div class="row mb-2 align-items-center">
+            <label class="form-label col-5">Email: </label>
+            <div class="col-7">
+                <input type="email" [(ngModel)]="cliente.email" class="form-control border-secondary-subtle">
+            </div>
+        </div>
+        <div class="row mb-2 align-items-center">
+            <label class="form-label col-5">Tarjeta de crédito: </label>
+            <div class="col-7">
+                <input type="text" [(ngModel)]="cliente.creditCard" class="form-control border-secondary-subtle">
+            </div>
+        </div>
+        <div class="row justify-content-around mt-5">
+            <div class="col d-flex justify-content-center">
+                <button type="button" class="btn btn-primary" (click)="crearReservacion()">Aceptar</button>
+            </div>
+            <div class="col d-flex justify-content-center">
+                <button type="button" class="btn btn-danger" (click)="estado = ''">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    }
+    @case ("success") {
+    <p class="mt-3">Gracias <i>{{cliente.name}} {{cliente.lastName}}</i>!! Su reservacion fue realizada exitosamente.</p>
+    <br>
+    <p>Código de reservación: <b>{{codigoReserva}}</b></p>
+    <br>
+    <p>
+        Acabamos de enviar esta informacion a la direccion <i>{{cliente.email}}</i> para mayor facilidad.
+    </p>
+    <br><br>
+    <p>
+        Gracias por preferirnos!
+    </p>
+    }
+    @case ("failed") {}
+    @default {
+    <h3>Consulta de habitaciones</h3>
+    <div class="mt-3 row ">
+        <div class="col-10 col-md-4 mt-2">
+            <label for="arravingDate" class="form-label ms-2">Fecha de entrada</label>
+            <input type="date" id="arravingDate" [(ngModel)]="arriving" class="form-control">
+        </div>
+        <div class="col-10 col-md-4 mt-2">
+            <label for="departingDate" class="form-label ms-2">Fecha de salida</label>
+            <input type="date" id="departingDate" [(ngModel)]="departing" class="form-control">
+        </div>
+        <div class="col-10 col-md-5 mt-4">
+            <select class="form-select">
+                <option selected>Tipo de habitación</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+            </select>
+        </div>
+        <div class="col-10 col-md-8 d-flex justify-content-center mt-5">
+            <button class="btn btn-primary" (click)="buscarHabitacion()">Aceptar</button>
+        </div>
+    </div>
+    }
+    }
+</div>
