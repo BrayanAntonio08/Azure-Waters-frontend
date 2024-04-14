@@ -1,0 +1,40 @@
+h1, h2{
+    text-align: center;
+}
+
+articulos{
+    display: flex;
+}
+
+
+img {
+    width: 900px; 
+    height: auto; 
+    clip-path: polygon(100% 50%, 70% 90%, 0% 90%, 0% 10%, 70% 10%);*/
+
+}
+
+p {
+    background-color: #333;
+    color: white;
+
+    font-size: 20px;
+    text-align: center;
+}
+
+ 
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  

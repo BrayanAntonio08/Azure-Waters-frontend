@@ -1,13 +1,15 @@
-<!-- rates.component.html -->
-<h1>Tarifas</h1>
-@for(room of roomTypes; track $index){
-    <div>
-        <h2>{{room.name}} </h2>
-        <img src="assets/bedroom.jpg" alt="Image 1">
-        <p>Precio en temporada baja: {{ room.lowSeasonPrice }}</p>
-        <p>Precio en temporada alta: {{ room.highSeasonPrice }}</p>
-    </div>
-}
+
+<div class="articulos">
+    <h1>Tarifas</h1>
+
+    @for(room of roomTypes; track $index){
+        <div>
+            <h2>{{room.name}} </h2>
+            <img src="{{room.imageUrl}}" alt="{{room.name}}">
+            <p>Precio en temporada baja: ${{ room.lowSeasonPrice }}, por noche.<br/>Precio en temporada alta: ${{ room.highSeasonPrice }}, por noche.</p>
+        </div>
+    }
+</div>
 
 
 
