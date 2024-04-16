@@ -8,16 +8,23 @@ import { Login } from '../../models/login';
 })
 export class AuthService {
 
-  active: boolean = false;
+  active: boolean = true;
+  private url: string;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.url = "http://localhost:7119/api/Usuarios";
+   }
 
   login(data: any): Observable<Login> {
     console.log(data);
     return this.http.post<Login>("http://localhost:7119/api/Usuarios/buscarUsuario?usuario=" + data.usuario + "&contrasenna=" + data.contrasenna, data);
   }
 
+
   isAdminActive(): boolean {
+    this.http.get(this.url).subscribe(data=> {
+      console.log(data);
+    })
     return this.active;
   }
 }
