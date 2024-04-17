@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { Login } from '../../models/login';
+import { Login } from '../../core/models/login';
 import { AuthService } from '../../core/services/auth.service';
+import { FormsModule } from '@angular/forms';
 
 let dataLogin: Login;
 
 @Component({
   selector: 'app-login-page',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.css'
 })
@@ -15,15 +16,13 @@ let dataLogin: Login;
 export class LoginPageComponent implements OnInit {
   public nombre: string;
   public contra: string;
-  public entrar: boolean;
+  public isActive: boolean;
   public error: boolean = false;
 
   constructor(private loginService: AuthService) {
-
     this.nombre = '';
     this.contra = '';
-    this.entrar = false;
-
+    this.isActive = false;
   }
 
   ngOnInit(): void { }
@@ -35,39 +34,39 @@ export class LoginPageComponent implements OnInit {
     }
     this.error = false;
 
-    console.log("Nombre" + this.nombre);
-    console.log("Contrasennia" + this.contra);
+    console.log(this.nombre);
+    console.log(this.contra);
     this.buscarUsuario(this.nombre, this.contra);
-
   }
 
   buscarUsuario(usuario: string, contrasenna: string) {
     if (usuario.trim().length !== 0 && contrasenna.trim().length !== 0) {
       this.loginService.login({ usuario, contrasenna }).subscribe((data: any) => {
         console.log(data);
-        dataLogin = new Login(data.usuario, data.contrasenna, data.id);
-        if (dataLogin.ID != null) {
+        if (data && data.usuarioId != null) {
+          dataLogin = new Login(data.nombreUsuario, data.contrasenna, data.usuarioId);
           sessionStorage.setItem('id', dataLogin.ID.toString());
           sessionStorage.setItem('usuario', dataLogin.usuario);
-
+          this.isActive = true;
+          console.log("Inicio de sesión exitoso: " + this.isActive);
         } else {
-          console.log("El nombre de usuario o la contraseña son incorrectos");
+          console.log("El nombre de usuario o la contraseña son incorrectos: " + this.isActive);
         }
       });
+
     } else {
       console.log("Buscar" + usuario.length);
     }
   }
+
+  logout() {
+    if (this.isActive === true) {
+      this.loginService.logout();
+      this.isActive = false;
+      console.log("Se cerró la sesión correctamente: " + this.isActive);
+    } else {
+      console.log("No ha iniciado sesión.");
+    }
+  }
+
 }
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-login-page',
-//   standalone: true,
-//   imports: [],
-//   templateUrl: './login-page.component.html',
-//   styleUrl: './login-page.component.css'
-// })
-// export class LoginPageComponent {
-
-// }
