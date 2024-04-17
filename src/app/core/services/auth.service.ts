@@ -9,7 +9,7 @@ import { Login } from '../models/login';
 export class AuthService {
 
   active: boolean = true;
-  private url: string;
+  private url: string = "";
 
   constructor(private http: HttpClient) {
     this.url = "http://localhost:7119/api/Usuarios";
