@@ -3,6 +3,12 @@ h2 {
     margin-bottom: 20px;
 }
 
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
 .form-group {
     margin-bottom: 20px;
 }
@@ -34,4 +40,8 @@ button {
 
 button:hover {
     background-color: #0056b3;
+}
+
+.logout-button {
+    margin-top: 10px;
 }
