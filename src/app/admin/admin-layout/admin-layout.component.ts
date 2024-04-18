@@ -7,11 +7,18 @@ import { AdminNavbarComponent } from '../admin-navbar/admin-navbar.component';
   standalone: true,
   imports: [RouterOutlet, AdminNavbarComponent],
   template: `
-    <header class="d-flex align-items-center">
+    <header class="d-flex justify-content-between">
+      <div class="d-flex align-items-center">
       <img
         src="assets/img/logo.png"
       />
       <h3 class="text-white">Hotel Azure Waters</h3>
+      <h5 class="text-white ms-3">Módulo administrativo</h5>
+      </div>
+      <div class="d-flex align-items-center">
+        <p>Bienvenido [usuario]<p>
+        <button class="btn btn-outline-danger ms-4">Salir</button>
+      </div>
     </header>
     <main class="container-fluid d-flex">
       <div class="d-flex flex-column d-none d-sm-flex col-sm-3 col-md-2">
