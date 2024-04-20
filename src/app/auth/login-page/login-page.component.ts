@@ -48,6 +48,7 @@ export class LoginPageComponent implements OnInit {
           sessionStorage.setItem('id', dataLogin.ID.toString());
           sessionStorage.setItem('usuario', dataLogin.usuario);
           this.isActive = true;
+          
           console.log("Inicio de sesión exitoso: " + this.isActive);
         } else {
           console.log("El nombre de usuario o la contraseña son incorrectos: " + this.isActive);

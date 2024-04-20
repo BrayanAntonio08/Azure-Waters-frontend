@@ -8,7 +8,7 @@ import { Login } from '../models/login';
 })
 export class AuthService {
 
-  active: boolean = true;
+  active: boolean = false;
   private url: string = "";
 
   constructor(private http: HttpClient) {
@@ -21,10 +21,9 @@ export class AuthService {
   }
 
   isAdminActive(): boolean {
-    this.http.get(this.url).subscribe(data => {
-      console.log(data);
-    })
-    return this.active;
+    console.log(sessionStorage.getItem("id"));
+
+    return sessionStorage.getItem("id") !== null;
   }
 
   logout(): void {
