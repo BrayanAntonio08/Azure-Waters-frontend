@@ -43,22 +43,21 @@ export class LoginPageComponent implements OnInit {
     if (usuario.trim().length !== 0 && contrasenna.trim().length !== 0) {
       this.loginService.login({ usuario, contrasenna }).subscribe((data: any) => {
         console.log(data);
-        if (data && data.usuarioId != null) {
-          dataLogin = new Login(data.nombreUsuario, data.contrasenna, data.usuarioId);
+        if (data && data.id != null) {
+          dataLogin = new Login(data.nombreUsuario, data.contrasenna, data.id);
           sessionStorage.setItem('id', dataLogin.ID.toString());
           sessionStorage.setItem('usuario', dataLogin.usuario);
           this.isActive = true;
-          
           console.log("Inicio de sesión exitoso: " + this.isActive);
         } else {
           console.log("El nombre de usuario o la contraseña son incorrectos: " + this.isActive);
         }
       });
-
     } else {
       console.log("Buscar" + usuario.length);
     }
   }
+  
 
   logout() {
     if (this.isActive === true) {
