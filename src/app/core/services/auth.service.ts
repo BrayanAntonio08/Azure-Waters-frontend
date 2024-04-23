@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Login } from '../../models/login';
+import { Login } from '../models/login';
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +9,11 @@ import { Login } from '../../models/login';
 export class AuthService {
 
   active: boolean = false;
+  private url: string = "";
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.url = "http://localhost:7119/api/Usuarios";
+  }
 
   login(data: any): Observable<Login> {
     console.log(data);
@@ -18,6 +21,14 @@ export class AuthService {
   }
 
   isAdminActive(): boolean {
-    return this.active;
+    console.log(sessionStorage.getItem("id"));
+
+    return sessionStorage.getItem("id") !== null;
+  }
+
+  logout(): void {
+    sessionStorage.removeItem('id');
+    sessionStorage.removeItem('usuario');
+    sessionStorage.removeItem('contrasenna');
   }
 }
