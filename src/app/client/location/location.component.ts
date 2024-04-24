@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Page } from '../../core/models/Page';
+import { PageService } from '../../core/services/page.service';
 
 @Component({
   selector: 'app-location',
@@ -8,5 +10,8 @@ import { Component } from '@angular/core';
   styleUrl: './location.component.css'
 })
 export class LocationComponent {
-
+  pageData: Page = new Page();
+  constructor(pageService: PageService){
+    pageService.loadPage("location").then(value => this.pageData = value);
+  }
 }
