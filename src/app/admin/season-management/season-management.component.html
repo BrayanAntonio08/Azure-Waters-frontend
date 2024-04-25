@@ -1,1 +1,33 @@
-<p>season-management works!</p>
+<div *ngIf="temporadas.length > 0">
+    <h2>Temporadas Disponibles</h2>
+    <table class="temporada-table">
+        <thead>
+            <tr>
+                <th>ID Temporada</th>
+                <th>Fecha de Inicio</th>
+                <th>Fecha de Fin</th>
+                <th>Descuento</th>
+                <th>ID Tipo</th>
+                <th colspan="2">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let temporada of temporadas">
+                <td>{{ temporada.idTemporada }}</td>
+                <td>{{ temporada.fechaInicio | date }}</td>
+                <td>{{ temporada.fechaFin | date }}</td>
+                <td>{{ temporada.descuento }}</td>
+                <td>{{ temporada.idTipo }}</td>
+                <td>
+                    <button class="btn btn-primary">Actualizar</button>
+                </td>
+                <td>
+                    <button class="btn btn-danger">Eliminar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div *ngIf="temporadas.length === 0">
+    <p>No hay temporadas disponibles.</p>
+</div>
