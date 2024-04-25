@@ -2,17 +2,20 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Login } from '../models/login';
+import { Temporada } from '../models/season'
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  active: boolean = true;
+  active: boolean = false;
   private url: string = "";
+  private url2: string = "";
 
   constructor(private http: HttpClient) {
     this.url = "http://localhost:7119/api/Usuarios";
+    this.url2 = "http://localhost:7119/api/Temporada";
   }
 
   login(data: any): Observable<Login> {
@@ -21,10 +24,13 @@ export class AuthService {
   }
 
   isAdminActive(): boolean {
-    this.http.get(this.url).subscribe(data => {
-      console.log(data);
-    })
-    return this.active;
+    console.log(sessionStorage.getItem("id"));
+
+    return sessionStorage.getItem("id") !== null;
+  }
+
+  getTemporada(): Observable<Temporada[]> {
+    return this.http.get<Temporada[]>(this.url2);
   }
 
   logout(): void {

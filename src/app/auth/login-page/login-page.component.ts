@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Login } from '../../core/models/login';
 import { AuthService } from '../../core/services/auth.service';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 let dataLogin: Login;
 
@@ -16,13 +17,11 @@ let dataLogin: Login;
 export class LoginPageComponent implements OnInit {
   public nombre: string;
   public contra: string;
-  public isActive: boolean;
   public error: boolean = false;
 
-  constructor(private loginService: AuthService) {
+  constructor(private loginService: AuthService, private router: Router) {
     this.nombre = '';
     this.contra = '';
-    this.isActive = false;
   }
 
   ngOnInit(): void { }
@@ -43,29 +42,19 @@ export class LoginPageComponent implements OnInit {
     if (usuario.trim().length !== 0 && contrasenna.trim().length !== 0) {
       this.loginService.login({ usuario, contrasenna }).subscribe((data: any) => {
         console.log(data);
-        if (data && data.usuarioId != null) {
-          dataLogin = new Login(data.nombreUsuario, data.contrasenna, data.usuarioId);
+        if (data && data.id != null) {
+          dataLogin = new Login(data.nombreUsuario, data.contrasenna, data.id);
           sessionStorage.setItem('id', dataLogin.ID.toString());
           sessionStorage.setItem('usuario', dataLogin.usuario);
-          this.isActive = true;
-          console.log("Inicio de sesión exitoso: " + this.isActive);
+          this.loginService.active = true;
+          console.log("Inicio de sesión exitoso: " + this.loginService.active);
+          this.router.navigate(['/admin']);
         } else {
-          console.log("El nombre de usuario o la contraseña son incorrectos: " + this.isActive);
+          console.log("El nombre de usuario o la contraseña son incorrectos: " + this.loginService.active);
         }
       });
-
     } else {
       console.log("Buscar" + usuario.length);
-    }
-  }
-
-  logout() {
-    if (this.isActive === true) {
-      this.loginService.logout();
-      this.isActive = false;
-      console.log("Se cerró la sesión correctamente: " + this.isActive);
-    } else {
-      console.log("No ha iniciado sesión.");
     }
   }
 
