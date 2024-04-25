@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { RoomType } from '../../core/models/RoomType';
 import { NgClass } from '@angular/common';
+import { RoomService } from '../../core/services/room.service';
+import { Room } from '../../core/models/Room';
 
 @Component({
   selector: 'app-rooms',
@@ -11,64 +13,31 @@ import { NgClass } from '@angular/common';
 })
 export class RoomsComponent {
 
+  state: string = "";
   activeRoomType : number = 1;
   roomTypes : RoomType[] = [];
-  rooms : any[] = [];
-  displayRooms: any[] = [];
+  rooms : Room[] = [];
+  displayRooms: Room[] = [];
 
-  constructor(){
-    this.roomTypes = [
-      {
-        id:1,
-        name:"Nombre 1",
-        price: 12.3,
-        description:"Una buena habitacion"
-      },
-      {
-        id:2,
-        name:"Nombre 2",
-        price: 12.3,
-        description:"Una buena habitacion"
-      },
-      {
-        id:3,
-        name:"Nombre 3",
-        price: 12.3,
-        description:"Una buena habitacion"
-      },
-    ]
-    this.rooms = [
-      {
-        number: 1,
-        type_id: 1
-      },{
-        number: 2,
-        type_id: 1
-      },{
-        number: 3,
-        type_id: 2
-      },{
-        number: 4,
-        type_id: 1
-      },{
-        number: 5,
-        type_id: 2
-      },{
-        number: 6,
-        type_id: 2
-      },{
-        number: 7,
-        type_id: 3
-      },{
-        number: 8,
-        type_id: 3
-      },
-    ]
-    this.displayRooms = this.rooms.filter(x => x.type_id === this.activeRoomType)
+  editingRoomType: RoomType | undefined = new RoomType();
+
+  constructor(private roomService: RoomService){
+    roomService.ListRoomTypes().then((value) => (this.roomTypes = value));
+    roomService.ListRooms().then((value) => {
+      this.rooms = value;
+      this.displayRooms = this.rooms.filter(
+        (x) => x.type_id === this.activeRoomType
+      );
+    });
   } //fin constructor
 
   changeRoomType(id:number){
     this.activeRoomType = id;
     this.displayRooms = this.rooms.filter(x => x.type_id === this.activeRoomType)
+  }
+
+  openUpdateRoomTypeForm(){
+    this.editingRoomType = this.roomTypes.find(item => item.id = this.activeRoomType);
+    this.state = "editingRoomType";
   }
 }

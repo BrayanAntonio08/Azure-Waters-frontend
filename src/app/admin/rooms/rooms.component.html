@@ -13,22 +13,53 @@
     }
 </ul>
 
+<div class="container mt-3">
+    <button class="btn btn-success" (click)="openUpdateRoomTypeForm()">Actualizar tipo de habitación</button>
+    <button class="btn btn-danger">Eliminar tipo de habitación</button>
+</div>
+
+@switch (state) {
+@default {
 <!-- cargar tabla según el tipo de habitacion -->
 <div class="d-flex justify-content-center mt-5">
-    <div class="col-10 col-sm-8 col-md-6 col-lg-4">
+    <div class="col-10 col-sm-8 col-md-7 ">
         <table class="table">
             <thead>
                 <th>Número</th>
                 <th>Activa</th>
+                <th class="d-flex justify-content-end">Acciones</th>
             </thead>
             <tbody>
                 @for (r of displayRooms; track $index) {
-                    <tr>
-                        <td>{{r.number}}</td>
-                        <td><input type="checkbox"></td>
-                    </tr>
+                <tr>
+                    <td>{{r.number}}</td>
+                    <td><input type="checkbox" [checked]="r.active"></td>
+                    <td class="d-flex justify-content-end">
+                        <button class="btn btn-success">Editar</button>
+                        <button class="btn btn-danger">Eliminar</button>
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>
-    </div>    
+    </div>
 </div>
+}
+@case ("editingRoomType") {
+<div>
+    <div>
+        <label for="">Nombre</label>
+        <input type="text" id="">
+    </div>
+    <div>
+        <label for="">Descripcion</label>
+        <textarea cols="30" rows="10"></textarea>
+    </div>
+
+    <div>
+        <button class="btn btn-primary">Aceptar</button>
+        <button class="btn btn-danger" (click)="state = ''">Cancelar</button>
+    </div>
+</div>
+}
+}

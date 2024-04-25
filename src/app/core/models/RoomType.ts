@@ -3,5 +3,4 @@ export class RoomType{
     name: string = "";
     price: number = 0;
     description: string = "";
-    
 }
