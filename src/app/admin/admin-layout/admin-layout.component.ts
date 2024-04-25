@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AdminNavbarComponent } from '../admin-navbar/admin-navbar.component';
+import { AuthService } from '../../core/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-layout',
@@ -17,7 +19,7 @@ import { AdminNavbarComponent } from '../admin-navbar/admin-navbar.component';
       </div>
       <div class="d-flex align-items-center">
         <p>Bienvenido [usuario]<p>
-        <button class="btn btn-outline-danger ms-4">Salir</button>
+        <button class="btn btn-outline-danger ms-4" (click)="logout()">Salir</button>
       </div>
     </header>
     <main class="container-fluid d-flex">
@@ -46,5 +48,18 @@ import { AdminNavbarComponent } from '../admin-navbar/admin-navbar.component';
   `
 })
 export class AdminLayoutComponent {
+
+  constructor(private loginService: AuthService, private router: Router) { }
+
+  logout() {
+    if (this.loginService.active === true) {
+      this.loginService.logout();
+      this.loginService.active = false;
+      console.log("Se cerró la sesión correctamente: " + this.loginService.active);
+      this.router.navigate(['/auth']);
+    } else {
+      console.log("No ha iniciado sesión.");
+    }
+  }
 
 }

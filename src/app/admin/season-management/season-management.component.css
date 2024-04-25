@@ -1,0 +1,54 @@
+.temporada-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.temporada-table th,
+.temporada-table td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+
+.temporada-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.temporada-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.temporada-table tr:hover {
+    background-color: #ddd;
+}
+
+.temporada-table th,
+.temporada-table td {
+    width: 20%;
+}
+
+.temporada-table th:nth-child(1),
+.temporada-table td:nth-child(1) {
+    width: 10%;
+}
+
+.temporada-table th:nth-child(2),
+.temporada-table td:nth-child(2) {
+    width: 25%;
+}
+
+.temporada-table th:nth-child(3),
+.temporada-table td:nth-child(3) {
+    width: 25%;
+}
+
+.temporada-table th:nth-child(4),
+.temporada-table td:nth-child(4) {
+    width: 20%;
+}
+
+.temporada-table th:nth-child(5),
+.temporada-table td:nth-child(5) {
+    width: 20%;
+}
