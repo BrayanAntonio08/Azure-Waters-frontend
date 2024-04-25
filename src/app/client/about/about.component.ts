@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { PageService } from '../../core/services/page.service';
+import { Page } from '../../core/models/Page';
 
 @Component({
   selector: 'app-about',
@@ -11,6 +13,12 @@ export class AboutComponent implements OnInit{
 
   images: string[] = [];
   activeImage : string = "";
+  pageData : Page = new Page();
+
+  constructor(pageService : PageService){
+
+    pageService.loadPage("about").then((value) => this.pageData = value);
+  }
 
   ngOnInit(): void {
     //Cargar las imagenes
