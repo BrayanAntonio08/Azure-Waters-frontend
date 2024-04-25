@@ -29,6 +29,9 @@ import { RouterLink } from '@angular/router';
         <li class="nav-item">
           <a routerLink="ads" class="nav-link">Publicidad</a>
         </li>
+        <li class="nav-item">
+          <a routerLink="seasons" class="nav-link">Temporadas</a>
+        </li>
       </ul>
     </nav>
   `,
