@@ -69,17 +69,17 @@
                 <div class="col-8 col-md-3">
                     <p>Imagen Actual</p>
                     <div>
-                        <img src="" alt="" class="w-100">
+                        <img [src]="roomTypeImage.url" alt="" class="w-100">
                     </div>
                 </div>
                 <div class="col-10 col-md-9">
                     <label class="form-label">Subir nueva imagen</label>
-                    <input type="file" class="form-control">
+                    <input type="file" class="form-control" (change)="selectFile($event)" accept="image/*">
                 </div>
             </div>
         
             <div class="m-5 d-flex justify-content-end">
-                <button class="btn btn-primary m-2">Aceptar</button>
+                <button class="btn btn-primary m-2" (click)="uploadImage()">Aceptar</button>
                 <button class="btn btn-danger m-2" (click)="cancelUpdateRoomType()">Cancelar</button>
             </div>
         </div>

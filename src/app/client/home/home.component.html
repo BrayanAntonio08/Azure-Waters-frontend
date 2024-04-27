@@ -1,9 +1,7 @@
 <section class="welcome">
-  <img src="assets/home.jpg" alt="imagen de bienvenida">
+  <img [src]="image.url" [alt]="image.alt">
   <div class="welcome-text">
     <h2>Bienvenidos al Hotel Azure Waters</h2>
-    <div [innerHTML]="pageData.texto">
-    </div>
-
+    <div [innerHTML]="pageData.texto"></div>
   </div>
 </section>
