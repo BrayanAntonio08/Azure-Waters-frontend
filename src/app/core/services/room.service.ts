@@ -26,4 +26,11 @@ export class RoomService {
       });
     });
   }
+
+  DeleteRoomType(id:number){
+    const confirm = window.confirm("¿Seguro que desea eliminar este tipo de habitación?");
+    if(confirm){
+      
+    }
+  }
 }

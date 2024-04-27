@@ -18,7 +18,7 @@ import { Router } from '@angular/router';
       <h5 class="text-white ms-3">Módulo administrativo</h5>
       </div>
       <div class="d-flex align-items-center">
-        <p>Bienvenido [usuario]<p>
+        <p>Bienvenido {{user}}<p>
         <button class="btn btn-outline-danger ms-4" (click)="logout()">Salir</button>
       </div>
     </header>
@@ -49,10 +49,14 @@ import { Router } from '@angular/router';
 })
 export class AdminLayoutComponent {
 
-  constructor(private loginService: AuthService, private router: Router) { }
+  user: string = "";
+  constructor(private loginService: AuthService, private router: Router) { 
+    let value = sessionStorage.getItem("usuario");
+    this.user = value? value: "";
+  }
 
   logout() {
-    if (this.loginService.active === true) {
+    if (this.loginService.isAdminActive()) {
       this.loginService.logout();
       this.loginService.active = false;
       console.log("Se cerró la sesión correctamente: " + this.loginService.active);

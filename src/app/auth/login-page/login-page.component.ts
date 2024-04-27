@@ -3,13 +3,14 @@ import { Login } from '../../core/models/login';
 import { AuthService } from '../../core/services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 let dataLogin: Login;
 
 @Component({
   selector: 'app-login-page',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, ToastrModule],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.css'
 })
@@ -19,12 +20,15 @@ export class LoginPageComponent implements OnInit {
   public contra: string;
   public error: boolean = false;
 
-  constructor(private loginService: AuthService, private router: Router) {
+  constructor(private loginService: AuthService, private router: Router, private msg: ToastrService) {
     this.nombre = '';
     this.contra = '';
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    if (this.loginService.isAdminActive())
+      this.router.navigate(["/admin"]);
+  }
 
   buttonInicioSesion(): void {
     if (this.nombre.trim().length === 0 || this.contra.trim().length === 0) {
@@ -50,6 +54,7 @@ export class LoginPageComponent implements OnInit {
           console.log("Inicio de sesión exitoso: " + this.loginService.active);
           this.router.navigate(['/admin']);
         } else {
+          this.msg.warning("El nombre de usuario o la contraseña son incorrectos");
           console.log("El nombre de usuario o la contraseña son incorrectos: " + this.loginService.active);
         }
       });

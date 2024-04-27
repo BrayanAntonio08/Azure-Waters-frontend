@@ -1,5 +1,6 @@
 <h1>Administrar habitaciones</h1>
 
+@if(state === ""){
 <ul class="nav nav-tabs">
 
     @for (roomType of roomTypes; track roomType.id) {
@@ -13,10 +14,11 @@
     }
 </ul>
 
-<div class="container mt-3">
-    <button class="btn btn-success" (click)="openUpdateRoomTypeForm()">Actualizar tipo de habitación</button>
-    <button class="btn btn-danger">Eliminar tipo de habitación</button>
+<div class="container col-11 mt-3 d-flex justify-content-between">
+    <button class="btn btn-success" (click)="openUpdateRoomTypeForm()">Editar descripción</button>
+    <button class="btn btn-danger" (click)="DeleteRoomType()">Eliminar</button>
 </div>
+}
 
 @switch (state) {
 @default {
@@ -42,24 +44,46 @@
                 }
             </tbody>
         </table>
+        @if(displayRooms.length === 0){
+            <p class="text-danger">No hay habitaciones registradas</p>
+        }
     </div>
 </div>
 }
 @case ("editingRoomType") {
-<div>
-    <div>
-        <label for="">Nombre</label>
-        <input type="text" id="">
-    </div>
-    <div>
-        <label for="">Descripcion</label>
-        <textarea cols="30" rows="10"></textarea>
+    <div class="container col-12 col-md-10 col-lg-9 mt-4">
+        <div class="row justify-content-center">
+            <div class="mb-2 col-12 col-lg-6">
+                <label for="" class="from-label">Nombre</label>
+                <input type="text" id="" class="form-control" [(ngModel)]="editingRoomType.name">
+            </div>
+            <div class="mb-2 col-12 col-lg-6">
+                <label for="" class="from-label">Tarifa diaria</label>
+                <input type="text" id="" class="form-control" [(ngModel)]="editingRoomType.price">
+            </div>
+            <div class="mb-2">
+                <label for="">Descripcion</label>
+                <textarea rows="6" class="form-control" [(ngModel)]="editingRoomType.description"></textarea>
+            </div>
+            <div class="mb-3 row">
+                <div class="col-8 col-md-3">
+                    <p>Imagen Actual</p>
+                    <div>
+                        <img src="" alt="" class="w-100">
+                    </div>
+                </div>
+                <div class="col-10 col-md-9">
+                    <label class="form-label">Subir nueva imagen</label>
+                    <input type="file" class="form-control">
+                </div>
+            </div>
+        
+            <div class="m-5 d-flex justify-content-end">
+                <button class="btn btn-primary m-2">Aceptar</button>
+                <button class="btn btn-danger m-2" (click)="cancelUpdateRoomType()">Cancelar</button>
+            </div>
+        </div>
     </div>
 
-    <div>
-        <button class="btn btn-primary">Aceptar</button>
-        <button class="btn btn-danger" (click)="state = ''">Cancelar</button>
-    </div>
-</div>
 }
 }
