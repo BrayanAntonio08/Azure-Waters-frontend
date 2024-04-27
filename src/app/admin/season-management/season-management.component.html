@@ -19,10 +19,10 @@
                 <td>{{ temporada.descuento }}</td>
                 <td>{{ temporada.idTipo }}</td>
                 <td>
-                    <button class="btn btn-primary">Actualizar</button>
+                    <button class="btn btn-primary" (click)="openUpdateSeasonModal(temporada)">Actualizar</button>
                 </td>
                 <td>
-                    <button class="btn btn-danger">Eliminar</button>
+                    <button class="btn btn-danger" (click)="eliminarTemporada(temporada.idTemporada)">Eliminar</button>
                 </td>
             </tr>
         </tbody>
@@ -30,4 +30,30 @@
 </div>
 <div *ngIf="temporadas.length === 0">
     <p>No hay temporadas disponibles.</p>
+</div>
+
+<button class="btn btn-success" (click)="openAddSeasonModal()">Agregar Temporada</button>
+
+<!-- Modal para agregar temporada -->
+<div id="addSeasonModal" class="modal">
+    <div class="modal-content">
+        <span class="close" (click)="closeAddSeasonModal()">&times;</span>
+        <h2>Agregar Temporada</h2>
+        <form (submit)="agregarActualizarTemporada()">
+            <label for="fechaInicio">Fecha de Inicio:</label>
+            <input type="datetime-local" id="fechaInicio" name="fechaInicio" [(ngModel)]="nuevaTemporada.fechaInicio"
+                required>
+
+            <label for="fechaFin">Fecha de Fin:</label>
+            <input type="datetime-local" id="fechaFin" name="fechaFin" [(ngModel)]="nuevaTemporada.fechaFin" required>
+
+            <label for="descuento">Descuento:</label>
+            <input type="number" id="descuento" name="descuento" [(ngModel)]="nuevaTemporada.descuento" required>
+
+            <label for="descuento">idTipo:</label>
+            <input type="number" id="idTipo" name="idTipo" [(ngModel)]="nuevaTemporada.idTipo" required>
+
+            <button type="submit" class="btn btn-primary">Agregar</button>
+        </form>
+    </div>
 </div>
