@@ -54,7 +54,7 @@
     border-radius: 5px;
     object-fit: cover;
   }
-  image img:hover{
+  .image img:hover{
     cursor: pointer;
   }
   

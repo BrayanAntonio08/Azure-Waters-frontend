@@ -1,12 +1,25 @@
 
-<div class="articulos">
+<div class="container">
     <h1>Tarifas</h1>
 
-    @for(room of roomTypes; track $index){
-        <div>
-            <h2>{{room.name}} </h2>
-            <img src="{{room.imageUrl}}" alt="{{room.name}}">
-            <p>Precio en temporada baja: ${{ room.lowSeasonPrice }}, por noche.<br/>Precio en temporada alta: ${{ room.highSeasonPrice }}, por noche.</p>
+    @for(room of roomTypes; track room.id){
+        <div class="card mb-3 col-11 col-md-9 mx-auto">
+            <div class="row g-0">
+                <div class="col-md-5">
+                    <img 
+                    [src]="room.image?.url" 
+                    class="img-fluid rounded-start" 
+                    [alt]="room.image?.alt"
+                    style="object-fit: cover; height: 100%;">
+                </div>
+                <div class="col-md-7">
+                    <div class="card-body">
+                        <h5 class="card-title">{{room.name}}</h5>
+                        <p class="card-text">{{room.description}}</p>
+                        <p class="card-text"><small class="text-body-secondary">Precio estándar por noche: ${{room.price}}</small></p>
+                    </div>
+                </div>
+            </div>
         </div>
     }
 </div>

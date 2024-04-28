@@ -8,14 +8,14 @@
       <div class="row mb-3">
         <div class="col-12 col-md-7">
           <div class="large-image">
-            <img src="{{activeImage}}" alt="">
+            <img [src]="activeImage.url" [alt]="activeImage.alt">
           </div>
         </div>
         <div class="col-12 col-md-5 small-images">
           <div class="row cols-4 cols-md-3 h-auto justify-content-center">
             @for (imgItem of images; track $index) {
               <div class="image">
-                <img src="{{imgItem}}" alt="Imagen 1" (click)="clickImage(imgItem)">
+                <img [src]="imgItem.url" [alt]="imgItem.alt" (click)="clickImage(imgItem)">
               </div>
             }
           </div>
