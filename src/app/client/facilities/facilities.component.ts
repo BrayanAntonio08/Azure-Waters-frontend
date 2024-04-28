@@ -1,16 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { Facilidad } from '../../core/models/Facilities';
 import { FacilitiesService } from '../../core/services/facilities.service';
+import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'app-facilities',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './facilities.component.html',
   styleUrls: ['./facilities.component.css']
 })
 
 export class FacilitiesComponent implements OnInit {
-  facilitiesData: Facilidad = new Facilidad();
+  facilidades: Facilidad[] = [];
 
   constructor(private facilitiesService: FacilitiesService) { }
 
@@ -19,12 +21,13 @@ export class FacilitiesComponent implements OnInit {
   }
 
   loadFacilities() {
-    this.facilitiesService.loadFacilities('facilities')
-      .then((data) => {
-        this.facilitiesData = data;
-      })
-      .catch((error) => {
+    this.facilitiesService.getFacilities().subscribe(
+      (data) => {
+        this.facilidades = data;
+      },
+      (error) => {
         console.error('Error al cargar las facilidades:', error);
-      });
+      }
+    );
   }
 }
