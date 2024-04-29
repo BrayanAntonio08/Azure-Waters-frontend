@@ -11,7 +11,7 @@ export class RoomService {
   private url: string = "http://localhost:7119/api/Habitacion";
   constructor(private http: HttpClient) { }
 
-  ListRoomTypes(): Promise<RoomType[]>{
+  ListRoomTypes(): Promise<RoomType[]> {
     return new Promise<RoomType[]>((resolve, reject) => {
       this.http.get<RoomType[]>(`${this.url}/tipos`).subscribe((data: RoomType[]) => {
         resolve(data);
@@ -19,7 +19,7 @@ export class RoomService {
     });
   }
 
-  ListRooms(): Promise<Room[]>{
+  ListRooms(): Promise<Room[]> {
     return new Promise<Room[]>((resolve, reject) => {
       this.http.get<Room[]>(`${this.url}/list`).subscribe((data: Room[]) => {
         resolve(data);
@@ -27,10 +27,14 @@ export class RoomService {
     });
   }
 
-  DeleteRoomType(id:number){
+  UpdateRoomType(roomType: RoomType): Promise<void> {
+    return this.http.put<void>(`${this.url}/tipos/${roomType.id}`, roomType).toPromise();
+  }
+
+  DeleteRoomType(id: number) {
     const confirm = window.confirm("¿Seguro que desea eliminar este tipo de habitación?");
-    if(confirm){
-      
+    if (confirm) {
+
     }
   }
 }

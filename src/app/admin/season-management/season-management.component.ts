@@ -15,6 +15,11 @@ import { NgIf } from '@angular/common';
 export class SeasonManagementComponent implements OnInit {
   temporadas: Temporada[] = [];
   nuevaTemporada: Temporada = { idTemporada: 0, fechaInicio: null, fechaFin: null, descuento: null, idTipo: 0 };
+  tiposHabitacion = [
+    { id: 1, nombre: 'Habitación Estándar' },
+    { id: 2, nombre: 'Habitación Familiar' },
+    { id: 3, nombre: 'Habitación de Lujo' }
+  ];
 
   constructor(private seasonService: SeasonService) { }
 
