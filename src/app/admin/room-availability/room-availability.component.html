@@ -1,1 +1,34 @@
-<p>room-availability works!</p>
+<div class="room-availability">
+  <h2>Disponibilidad de Habitaciones</h2>
+
+  <div class="search-bar">
+    <label for="fechaInicio">Fecha de Inicio:</label>
+    <input type="date" id="fechaInicio" [(ngModel)]="fechaInicio" name="fechaInicio">
+
+    <label for="fechaFinal">Fecha Final:</label>
+    <input type="date" id="fechaFinal" [(ngModel)]="fechaFinal" name="fechaFinal">
+
+    <label for="tipoHabitacion">Tipo de Habitación:</label>
+    <select id="tipoHabitacion" [(ngModel)]="tipoHabitacionSeleccionado" name="tipoHabitacion">
+      <option value="" selected>--Seleccionar Tipo--</option>
+      <option *ngFor="let tipo of tiposHabitaciones" [value]="tipo.id">{{ tipo.name }}</option>
+    </select>
+
+    <button (click)="consultarDisponibilidad()">Consultar Disponibilidad</button>
+  </div>
+
+  <div class="results" *ngIf="habitacionesDisponibles.length > 0">
+    <h2>Resultados de la Consulta</h2>
+    <ul>
+      <li *ngFor="let room of habitacionesDisponibles">
+        Habitación {{ room.id }} (Tipo: {{getRoomType(room) }}) - Costo: {{ costoEstancia }}
+      </li>
+    </ul>
+  </div>
+
+  <div class="no-results" *ngIf=" habitacionesDisponibles.length === 0">
+    <p>No se encontraron habitaciones disponibles para las fechas seleccionadas.</p>
+  </div>
+</div>
+
+

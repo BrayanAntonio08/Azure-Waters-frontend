@@ -2,14 +2,19 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { RoomType } from '../models/RoomType';
 import { Room } from '../models/Room';
+import { catchError, Observable } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class RoomService {
 
-  private url: string = "http://localhost:7119/api/Habitacion";
-  constructor(private http: HttpClient) { }
+  private url: string = "";
+
+  constructor(private http: HttpClient) {
+    this.url = "http://localhost:7119/api/Habitacion";
+  }
 
   ListRoomTypes(): Promise<RoomType[]> {
     return new Promise<RoomType[]>((resolve, reject) => {
@@ -37,4 +42,11 @@ export class RoomService {
 
     }
   }
+
+  getRoom(): Observable<Room[]> {
+    return this.http.get<Room[]>(`${this.url}/list`);
+    
+  }
 }
+
+

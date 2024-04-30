@@ -1,1 +1,27 @@
-<p>status works!</p>
+<h2>Estado de las habitaciones del Hotel el día de hoy</h2>
+<p id="fecha">Fecha Actual: {{ fechaActualizada }}</p>
+<div *ngIf="rooms.length > 0">
+    <table class="table">
+        
+        <thead>
+            <tr>
+                <th>Número de habitación</th>
+                <th>Tipo de habitación</th>
+                <th>Disponibilidad</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let room of rooms">
+                <td>{{ room.number }}</td>
+                <td>{{ getRoomType(room) }}</td>
+                <td>{{ getRoomStatus(room) }}</td> 
+                
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div *ngIf="rooms.length === 0">
+    <p>No hay habitaciones para mostrar.</p>
+</div>
+

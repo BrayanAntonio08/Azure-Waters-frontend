@@ -1,8 +1,9 @@
-export class Room{
-    id: number = 0;
-    number: number = 0;
-    type_id: number = 0;
-    active: boolean = false;
-    reserved: boolean = false;
-    checking: boolean = false;
+export interface Room{
+    id: number ;
+    number: number ;
+    type_id: number ;
+    active: boolean ;
+    reserved: boolean ;
+    checking: boolean ;
 }
+
