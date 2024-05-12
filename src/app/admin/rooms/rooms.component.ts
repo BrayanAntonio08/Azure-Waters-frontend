@@ -20,6 +20,7 @@ export class RoomsComponent {
   state: string = "";
   activeRoomType: number = 1;
   roomTypes: RoomType[] = [];
+  displayRoomsType?: RoomType = new RoomType();
   rooms: Room[] = [];
   displayRooms: Room[] = [];
   fileImg?: File;
@@ -39,6 +40,7 @@ export class RoomsComponent {
 
   changeRoomType(id: number) {
     this.activeRoomType = id;
+    this.displayRoomsType = this.roomTypes.find(x => x.id === id)
     this.displayRooms = this.rooms.filter(x => x.type_id === this.activeRoomType)
   }
 

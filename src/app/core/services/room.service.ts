@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { RoomType } from '../models/RoomType';
 import { Room } from '../models/Room';
 import { catchError, Observable } from 'rxjs';
+import { Reservation } from '../models/Reservation';
 
 
 @Injectable({
@@ -45,7 +46,23 @@ export class RoomService {
 
   getRoom(): Observable<Room[]> {
     return this.http.get<Room[]>(`${this.url}/list`);
-    
+
+  }
+
+  checkRoom(request: Reservation): Promise<any> {
+    return new Promise((resolve) => {
+      this.http.post<any>(`${this.url}/revisar`, request).
+        subscribe(
+          (value) => {
+            console.log(value);
+            resolve(value);
+          }
+        );
+    });
+  }
+
+  finishRevision(id_room:number){
+    this.http.delete(`${this.url}/liberar/${id_room}`).subscribe(res => console.log(res));
   }
 }
 

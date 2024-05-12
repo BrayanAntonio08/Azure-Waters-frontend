@@ -1,6 +1,12 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Client } from '../../core/models/Client';
+import { Reservation } from '../../core/models/Reservation';
+import { RoomService } from '../../core/services/room.service';
+import { TipoHabitacion } from '../../core/models/season';
+import { RoomType } from '../../core/models/RoomType';
+import { ReservationRoom, Room } from '../../core/models/Room';
+import { ReservationService } from '../../core/services/reservation.service';
 
 @Component({
   selector: 'app-book-room',
@@ -12,40 +18,57 @@ import { Client } from '../../core/models/Client';
 export class BookRoomComponent {
 
   // variables de datos
+  roomTypes: RoomType[] = []
   estado: string = "";
-  room = {
-    img: "https://www.culmia.com/blog/wp-content/uploads/2021/07/Como-distribuir-los-muebles-en-una-habitacion.jpg",
-    description: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eos in magni velit cum tempora amet soluta tempore nostrum excepturi accusantium iure laudantium corrupti dolorum beatae ipsam, repellendus iusto fugiat rerum?"
-  }
   cliente: Client = new Client();
 
   // variables de entrada para la transacción
-  arriving?: Date;
-  departing?: Date;
+  reservation : Reservation = new Reservation();
+  room: ReservationRoom = new ReservationRoom();
   codigoReserva = "";
   
+  constructor(private roomService: RoomService, private reservationService: ReservationService){
+    roomService.ListRoomTypes().then(value => {
+      this.roomTypes = value;
+      this.reservation.room_type_id = this.roomTypes[0].id;
+    });
+  }
 
   buscarHabitacion() {
-    console.log(this.arriving);
-    console.log(this.departing);
+    this.roomService.checkRoom(this.reservation).then(
+      (response) => {
+        if(response.success){
+          this.reservation = response.data;
+          this.room = this.reservation.room? this.reservation.room: new ReservationRoom();
+          this.estado = "booking";
+        }else{
 
-    let found = Math.random() < 0.5; // implementación provisional de si hay disponibilidad o no
-    if (found)
-      this.estado = "booking";
-    else 
-      this.estado = "failed";
+          this.estado = "failed";
+        }
+      }
+    )
+  }
+
+  cancelBooking(){
+    this.roomService.finishRevision(this.room.id);
+    this.reservation = new Reservation();
+    this.estado = '';
   }
 
   crearReservacion() {
-    this.codigoReserva = this.newGuid();
-    this.estado = "success";
+    // tranfer variables to reservation object
+    this.reservation.client_id = this.cliente.id;
+    this.reservation.client_lastname = this.cliente.lastName;
+    this.reservation.client_name = this.cliente.name;
+    this.reservation.client_email = this.cliente.email;
+    this.reservation.payment_card = this.cliente.creditCard;
+
+    console.log(this.reservation)
+    this.reservationService.create(this.reservation).then(value => {
+      this.reservation = value;
+      this.estado = "success";
+    })
+
   }
 
-  newGuid() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-      var r = Math.random() * 16 | 0,
-        v = c == 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
-    });
-  }
 }

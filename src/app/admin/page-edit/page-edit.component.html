@@ -1,1 +1,31 @@
-<p>page-edit works!</p>
+<h1>Modificar páginas</h1>
+
+<!-- El contenido cambia segun el que se quiere editar -->
+@if(editing){
+    <div class="container">
+        <button class="btn btn-outline-secondary" (click)="editing = false">Volver</button>
+        <h3>{{pages[editingPage]}}</h3>
+        <div class="col-10 mx-auto">
+            <editor apiKey="qa90vkqvgp3r21pho0drh9vr8yyky7slpzx96dn0kpkagdix" [init]="editorConfig"></editor>
+        </div>
+        
+    </div>
+}@else {
+    <!-- Mostrar las posibles paginas a editar -->
+    <p>Seleccione la pagina que desea modificar</p>
+
+    <div class="row row-cols-2">
+        <div class="mb-2 d-flex justify-content-center">
+            <button class="btn btn-outline-primary" (click)="editPage('home')">Home</button>
+        </div>
+        <div class="mb-2 d-flex justify-content-center">
+            <button class="btn btn-outline-primary" (click)="editPage('about')">Sobre nosotros</button>
+        </div>
+        <div class="mb-2 d-flex justify-content-center">
+            <button class="btn btn-outline-primary" (click)="editPage('location')">Cómo llegar</button>
+        </div>
+        <div class="mb-2 d-flex justify-content-center">
+            <button class="btn btn-outline-primary" (click)="editPage('contact')">Contacto</button>
+        </div>
+    </div>
+}

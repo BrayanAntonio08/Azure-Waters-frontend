@@ -7,3 +7,11 @@ export interface Room{
     checking: boolean ;
 }
 
+export class ReservationRoom{
+    id: number = 0;
+    number: number = 0;
+    type_id?: number ;
+    image_url?: string;
+    description: string = "";
+    price: number = 0;
+}
