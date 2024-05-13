@@ -5,5 +5,6 @@ export class RoomType{
     name: string = "";
     price: number = 0;
     description: string = "";
+    imagenId: number = 0
     image?: Image;
 }
