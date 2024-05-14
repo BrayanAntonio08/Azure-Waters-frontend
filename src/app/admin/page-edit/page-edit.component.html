@@ -6,9 +6,37 @@
         <button class="btn btn-outline-secondary" (click)="editing = false">Volver</button>
         <h3>{{pages[editingPage]}}</h3>
         <div class="col-10 mx-auto">
-            <editor apiKey="qa90vkqvgp3r21pho0drh9vr8yyky7slpzx96dn0kpkagdix" [init]="editorConfig"></editor>
+            <label class="form-label">Descripción de la página</label>
+            <editor apiKey="qa90vkqvgp3r21pho0drh9vr8yyky7slpzx96dn0kpkagdix" [init]="editorConfig" [(ngModel)]="pageInfo.texto"></editor>
+    
+            <!-- Change the file management based on the page: home needs one, about needs an array -->
+            @if(editingPage === 'home'){
+                <div class="row mt-2">
+                    <div class="col-12 col-md-4">
+                        <p class="form-label">Imagen Actual</p>
+                        <div>
+                            @if(pageImg.length > 0){
+                            <img [src]="pageImg[0].url" alt="" class="w-100 rounded-2">
+                            }
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-8">
+                        <label class="form-label">Subir nueva imagen</label>
+                        <input type="file" class="form-control mt-2" (change)="selectFile($event)" accept="image/*">
+                    </div>
+                </div>
+            }
+            @if(editingPage === 'about'){
+                <input type="file" class="form-control mt-3" (change)="selectFile($event)" accept="image/*" [multiple]="true">
+            }
+
+            <div class="my-4 d-flex justify-content-end">
+                <div class="col-12 col-md-8 col-lg-5 d-flex justify-content-between">
+                    <button type="button" class="btn btn-primary" (click)="saveChanges()">Guardar</button>
+                    <button type="button" class="btn btn-danger">Cancelar</button>
+                </div>
+            </div>
         </div>
-        
     </div>
 }@else {
     <!-- Mostrar las posibles paginas a editar -->

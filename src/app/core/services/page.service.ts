@@ -44,4 +44,15 @@ export class PageService {
         })
       });
   }
+
+  modifyPage(page: Page){
+    this.http.put(this.url, page).pipe(
+      catchError((error) => {
+        this.msg.error("Error al intentar actualizar los datos");
+        throw error;
+      })
+    ).subscribe((data)=>{
+      this.msg.success("Se ha actualizado exitosamente");
+    })
+  }
 }
