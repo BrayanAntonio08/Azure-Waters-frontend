@@ -1,3 +1,4 @@
+
 <h2>Estado de las habitaciones del Hotel el día de hoy</h2>
 <p id="fecha">Fecha Actual: {{ fechaActualizada }}</p>
 <div *ngIf="rooms.length > 0">
@@ -20,7 +21,12 @@
             </tr>
         </tbody>
     </table>
+    <button (click)="printRoomStatus()">
+        <img src="https://th.bing.com/th/id/OIP.Um5tV9OWtXi4HZFBRhQ7RQHaHa?rs=1&pid=ImgDetMain" alt="Texto Alternativo">
+    </button>
+
 </div>
+
 <div *ngIf="rooms.length === 0">
     <p>No hay habitaciones para mostrar.</p>
 </div>

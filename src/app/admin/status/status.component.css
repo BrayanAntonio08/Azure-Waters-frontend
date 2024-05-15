@@ -25,3 +25,13 @@ th {
     border: 3px solid #000; 
   }
 
+
+  button {
+    width: 90px; 
+    height: 90px; 
+  }
+  
+  button img {
+    max-width: 70%; /* La imagen se ajustará automáticamente al ancho del botón */
+    max-height: 70%; /* La imagen se ajustará automáticamente al alto del botón */
+  }
