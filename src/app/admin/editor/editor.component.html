@@ -1,0 +1,27 @@
+<div class="editor-container">
+    <div class="toolbar">
+        <div class="selector" (click)="openSelector()">
+            <div class="selector-content">{{selectedFormat}}</div>
+            <fa-icon [icon]="faSelector" style="margin-right: 5px;"></fa-icon>
+
+            <div class="format-options" [class.show]="!selectorClose" #formatOptions>
+                <div class="format-item" (click)="formatBlock('P')">
+                    <p style="margin: 0;">Paragraph</p>
+                </div>
+                <div class="format-item" (click)="formatBlock('H1')">
+                    <h1>Heading 1</h1>
+                </div>
+                <div class="format-item" (click)="formatBlock('H2')">
+                    <h2>Heading 2</h2>
+                </div>
+            </div>
+        </div>
+        
+        <button (click)="formatText('bold', $event)">
+            <fa-icon [icon]="faBold"></fa-icon>
+        </button>
+        <button (click)="formatText('italic', $event)"><fa-icon [icon]="faItalic"></fa-icon></button>
+        <button (click)="formatText('underline', $event)"><fa-icon [icon]="faUnderline"></fa-icon></button>
+    </div>
+    <div class="editable" contenteditable="true" #textEditor [innerHTML]="text" (click)="editorClick()" (keyup)="checkCurrentTag()" (blur)="onBlur()"></div>
+</div>

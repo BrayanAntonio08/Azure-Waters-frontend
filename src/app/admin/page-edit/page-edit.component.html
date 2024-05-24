@@ -7,7 +7,8 @@
         <h3>{{pages[editingPage]}}</h3>
         <div class="col-10 mx-auto">
             <label class="form-label">Descripción de la página</label>
-            <editor apiKey="qa90vkqvgp3r21pho0drh9vr8yyky7slpzx96dn0kpkagdix" [init]="editorConfig" [(ngModel)]="pageInfo.texto"></editor>
+            <app-editor [text]="pageInfo.texto" (outputResult)="receivePageText($event)"></app-editor>
+            <!-- <editor apiKey="qa90vkqvgp3r21pho0drh9vr8yyky7slpzx96dn0kpkagdix" [init]="editorConfig" [(ngModel)]="pageInfo.texto"></editor> -->
     
             <!-- Change the file management based on the page: home needs one, about needs an array -->
             @if(editingPage === 'home'){
@@ -27,13 +28,30 @@
                 </div>
             }
             @if(editingPage === 'about'){
-                <input type="file" class="form-control mt-3" (change)="selectFile($event)" accept="image/*" [multiple]="true">
+                <div class="row mt-2">
+                    <div class="col-12 col-lg-8">
+                        <!-- gallery -->
+                        <div class="gallery row cols-4 cols-md-3 ">
+                            @for (imgItem of pageImg; track $index) {
+                                <div class="image">
+                                  <img [src]="imgItem.url" [alt]="imgItem.alt" >
+                                  <button class="delete-button"><fa-icon [icon]="faX"></fa-icon></button>
+                                </div>
+                              }
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4">
+                        <input type="file" class="form-control mt-3" (change)="selectFile($event)" accept="image/*" [multiple]="true">
+                    </div>
+                </div>
+
+                
             }
 
             <div class="my-4 d-flex justify-content-end">
                 <div class="col-12 col-md-8 col-lg-5 d-flex justify-content-between">
                     <button type="button" class="btn btn-primary" (click)="saveChanges()">Guardar</button>
-                    <button type="button" class="btn btn-danger">Cancelar</button>
+                    <button type="button" class="btn" (click)="cancel()">Cancelar</button>
                 </div>
             </div>
         </div>

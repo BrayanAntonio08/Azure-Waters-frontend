@@ -1,0 +1,37 @@
+.gallery{
+    border: 1px green dashed;
+    min-height: 200px;
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+
+.image {
+    height: 150px;
+    width: 150px;
+    margin: 3px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.image img {
+    width: 100%;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+.delete-button{
+    position: absolute;
+    right: 0px;
+    top: 20px;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: red;
+    color: white;
+    border: 1px solid darkred;
+    text-align: center;
+    display: flex;
+    align-items: center;
+}

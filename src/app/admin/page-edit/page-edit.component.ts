@@ -4,11 +4,15 @@ import { Image } from '../../core/models/Image';
 import { Page } from '../../core/models/Page';
 import { PageService } from '../../core/services/page.service';
 import { FormsModule } from '@angular/forms';
+import { EditorComponent } from '../editor/editor.component';
+import { ImageService } from '../../core/services/image.service';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faX } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-page-edit',
   standalone: true,
-  imports: [EditorModule, FormsModule],
+  imports: [EditorModule, FormsModule, EditorComponent, FontAwesomeModule],
   templateUrl: './page-edit.component.html',
   styleUrl: './page-edit.component.css'
 })
@@ -24,6 +28,7 @@ export class PageEditComponent {
   imgFiles: File[] = [];
   pageImg: Image[] = [];
   pageInfo: Page = new Page();
+  faX = faX
 
   editorConfig = {
     plugins: [
@@ -45,7 +50,7 @@ export class PageEditComponent {
     ai_request: (request:any, respondWith:any) => respondWith.string(() => Promise.reject(" See docs to implement AIAssistant")), 
   }
 
-  constructor(private pageService: PageService){
+  constructor(private pageService: PageService, private imgService: ImageService){
   }
 
   editPage(page: string){
@@ -61,7 +66,7 @@ export class PageEditComponent {
     // also we need to load the page info so the text editor contains it
     this.pageService.loadPage(this.editingPage).then((value) => {
         this.pageInfo = value;
-        // now we have the information, we have to load it in the text editor
+        // now we have the information, we have to load it in the text editor but for that we use a Input value on editor component
 
       })
   
@@ -72,10 +77,37 @@ export class PageEditComponent {
     this.imgFiles = event.target.files;
     console.log(this.imgFiles);
     // load the images into the img array, or change the value if home page is editing
+    if(this.editingPage == 'home'){
+      const file = this.imgFiles[0];
+      this.pageImg = []
+      let image = new Image()
+      image.url = URL.createObjectURL(file);
+      this.pageImg.push(image);
+    }
   }
 
-  saveChanges(){
+  async saveChanges(){
+    this.pageInfo.imagenes = this.pageImg;
+
+    if(this.editingPage == 'home'){
+      //check if picture is from file
+      console.log(this.imgFiles);
+      if(this.imgFiles.length > 0){
+        //upload file to cloudinary
+        let newImg = await this.imgService.upload(this.imgFiles[0])
+        this.pageImg = [newImg]
+      }
+    }
+
     this.pageInfo.imagenes = this.pageImg;
     this.pageService.modifyPage(this.pageInfo)
+  }
+
+  cancel(){
+    this.editing = false;
+  }
+
+  receivePageText(text : string){
+    this.pageInfo.texto = text;
   }
 }

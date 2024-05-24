@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { AdminNavbarComponent } from '../admin-navbar/admin-navbar.component';
 import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
@@ -7,10 +7,10 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-admin-layout',
   standalone: true,
-  imports: [RouterOutlet, AdminNavbarComponent],
+  imports: [RouterOutlet, AdminNavbarComponent, RouterLink],
   template: `
     <header class="d-flex justify-content-between">
-      <div class="d-flex align-items-center">
+      <div class="d-flex align-items-center" [routerLink]="['/']" style="cursor: pointer;">
       <img
         src="assets/img/logo.png"
       />

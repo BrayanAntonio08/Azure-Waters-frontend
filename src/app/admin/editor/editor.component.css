@@ -1,0 +1,96 @@
+/* src/app/rich-text-editor/rich-text-editor.component.css */
+.editor-container {
+    border: 1.5px solid #ccc;
+    border-radius: 10px;
+    margin: 20px;
+    position: relative; /* Añadir para contexto de posicionamiento absoluto */
+}
+
+.toolbar {
+    background-color: white;
+    padding: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    gap: 5px;
+    position: relative; /* Añadir para contexto de posicionamiento absoluto */
+}
+
+.toolbar button {
+    border: none;
+    background-color: white;
+    color: black;
+    min-width: 2em;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 3px;
+}
+.toolbar button:hover{
+    background-color: rgb(230, 230, 230);
+}
+
+.editable {
+    min-height: 200px;
+    max-height: 250px;
+    overflow-y: auto;
+    padding: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border:none;
+}
+.editable:focus {
+    border: 1.5px solid rgb(86, 88, 231);
+    outline: none; /* Elimina el borde predeterminado del navegador */
+}
+
+.selector {
+    display: flex;
+    margin: 3px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 5px;
+    position: relative;
+}
+
+.selector-content {
+    min-width: 200px;
+    height: 1.5em;
+    margin: 0;
+    padding: 0;
+}
+
+.format-options {
+    position: absolute;
+    top: 100%; /* Muestra justo debajo del selector */
+    left: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* Para asegurarse de que está encima de otros elementos */
+    display: none; /* Oculto por defecto */
+}
+
+.format-options.show {
+    display: block; /* Muestra el dropdown cuando la clase 'show' está presente */
+}
+
+.format-item {
+    min-width: 200px;
+    padding: 15px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin: 5px;
+    height: 2.5em;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    overflow-y: visible;
+}
+.format-item:hover{
+    background-color: rgb(12, 77, 151);
+    color:white;
+    cursor: pointer;
+    overflow-y: hidden;
+}
