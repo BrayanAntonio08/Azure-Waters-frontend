@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { EditorComponent } from '../editor/editor.component';
 import { ImageService } from '../../core/services/image.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faX } from '@fortawesome/free-solid-svg-icons';
+import { faCloudArrowUp, faX } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-page-edit',
@@ -25,10 +25,12 @@ export class PageEditComponent {
     'location': 'Cómo llegar',
     'contact': 'Contacto'
   }
-  imgFiles: File[] = [];
+ 
+  imgFiles: fileData[] = [];
   pageImg: Image[] = [];
   pageInfo: Page = new Page();
   faX = faX
+  faUpload = faCloudArrowUp
 
   editorConfig = {
     plugins: [
@@ -73,16 +75,47 @@ export class PageEditComponent {
     this.editing = true;
   }
 
+  deleteImage(img: Image){
+    if(img.id == 0){
+      // should delete the file
+      let imgPos = this.pageImg.findIndex((value)=>value.url===img.url);
+      this.imgFiles = this.imgFiles.filter(x => x.imagePos != imgPos);
+      this.imgFiles = this.imgFiles.map(x => {
+        x.imagePos = x.imagePos > imgPos? x.imagePos-1:x.imagePos;
+        return x;
+      })
+      console.log(this.imgFiles);
+
+      this.pageImg = this.pageImg.filter((x) => x.url != img.url);
+      return
+    }
+    this.pageImg = this.pageImg.filter((x) => x.id != img.id);
+  }
+
   selectFile(event: any) {
-    this.imgFiles = event.target.files;
-    console.log(this.imgFiles);
+    const files = event.target.files;
+    
     // load the images into the img array, or change the value if home page is editing
     if(this.editingPage == 'home'){
-      const file = this.imgFiles[0];
-      this.pageImg = []
-      let image = new Image()
+      const file = files[0];
+      this.pageImg = [];
+      this.imgFiles = [];
+      let image = new Image();
       image.url = URL.createObjectURL(file);
       this.pageImg.push(image);
+      this.imgFiles.push({imagePos:0, file:file})
+    }
+    if (this.editingPage == 'about') {
+      if(files.length === 0) return;
+
+      for (let i = 0; i < files.length; i++) {
+        let image = new Image()
+        image.url = URL.createObjectURL(files[i]);
+        let imagePos = this.pageImg.length;
+        this.pageImg.push(image);
+        this.imgFiles.push({imagePos:imagePos, file:files[i]})
+      }
+      console.log(this.imgFiles);
     }
   }
 
@@ -94,12 +127,26 @@ export class PageEditComponent {
       console.log(this.imgFiles);
       if(this.imgFiles.length > 0){
         //upload file to cloudinary
-        let newImg = await this.imgService.upload(this.imgFiles[0])
+        let newImg = await this.imgService.upload(this.imgFiles[0].file)
         this.pageImg = [newImg]
+      }
+    }
+    if(this.editingPage === 'about'){
+      let totalImages = this.pageImg.length;
+      // delete the temp images so they are replaced with those saved at cloudinary
+      this.pageImg = this.pageImg.filter(x => x.id != 0);
+      //save every file
+      while(this.imgFiles.length > 0){
+        let imgFile = this.imgFiles.shift()
+        if(imgFile){
+          let savedImg = await this.imgService.upload(imgFile.file);
+          this.pageImg.push(savedImg);
+        }
       }
     }
 
     this.pageInfo.imagenes = this.pageImg;
+    console.log(this.pageImg)
     this.pageService.modifyPage(this.pageInfo)
   }
 
@@ -110,4 +157,9 @@ export class PageEditComponent {
   receivePageText(text : string){
     this.pageInfo.texto = text;
   }
+}
+
+interface fileData {
+    imagePos:number
+    file:File
 }
