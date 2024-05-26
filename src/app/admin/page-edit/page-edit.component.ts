@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { EditorModule } from '@tinymce/tinymce-angular';
 import { Image } from '../../core/models/Image';
 import { Page } from '../../core/models/Page';
 import { PageService } from '../../core/services/page.service';
@@ -7,12 +6,14 @@ import { FormsModule } from '@angular/forms';
 import { EditorComponent } from '../editor/editor.component';
 import { ImageService } from '../../core/services/image.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faCloudArrowUp, faX } from '@fortawesome/free-solid-svg-icons';
+import { faCloudArrowUp, faPen, faX } from '@fortawesome/free-solid-svg-icons';
+import { FacilitiesService } from '../../core/services/facilities.service';
+import { Facilidad } from '../../core/models/Facilities';
 
 @Component({
   selector: 'app-page-edit',
   standalone: true,
-  imports: [EditorModule, FormsModule, EditorComponent, FontAwesomeModule],
+  imports: [FormsModule, EditorComponent, FontAwesomeModule],
   templateUrl: './page-edit.component.html',
   styleUrl: './page-edit.component.css'
 })
@@ -23,36 +24,25 @@ export class PageEditComponent {
     'home': 'Home',
     'about': 'Sobre nosotros',
     'location': 'Cómo llegar',
-    'contact': 'Contacto'
+    'contact': 'Contacto',
+    'facilities': 'Facilidades'
   }
  
   imgFiles: fileData[] = [];
   pageImg: Image[] = [];
   pageInfo: Page = new Page();
+  facilities: Facilidad[] = []
+  facilityInfo: Facilidad | undefined | null = null;
+
   faX = faX
   faUpload = faCloudArrowUp
+  faPen = faPen
 
-  editorConfig = {
-    plugins: [
-      'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media',
-      'searchreplace', 'table', 'visualblocks', 'wordcount', 'checklist', 'mediaembed', 'casechange', 'export',
-      'formatpainter', 'pageembed', 'linkchecker', 'permanentpen', 'powerpaste',
-      'advtable', 'advcode', 'editimage', 'advtemplate', 'ai', 'mentions', 'tinycomments', 'tableofcontents',
-      'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown'
-    ],
-    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link media table mergetags | align lineheight | checklist numlist bullist indent outdent | removeformat',
-    tinycomments_mode: 'embedded',
-    tinycomments_author: 'Author name',
-    mergetags_list: [
-      { value: 'First.Name', title: 'First Name' },
-      { value: 'Email', title: 'Email' },
-    ],
-    language: 'es', // Set language to Spanish
-    language_url: 'URL_TO_SPANISH_LANG_FILE',
-    ai_request: (request:any, respondWith:any) => respondWith.string(() => Promise.reject(" See docs to implement AIAssistant")), 
-  }
 
-  constructor(private pageService: PageService, private imgService: ImageService){
+  constructor(
+    private pageService: PageService, 
+    private imgService: ImageService, 
+    private facilitiesService: FacilitiesService){
   }
 
   editPage(page: string){
@@ -66,12 +56,16 @@ export class PageEditComponent {
     }
     
     // also we need to load the page info so the text editor contains it
-    this.pageService.loadPage(this.editingPage).then((value) => {
+    if (page != 'facilities')
+      this.pageService.loadPage(this.editingPage).then((value) => {
         this.pageInfo = value;
         // now we have the information, we have to load it in the text editor but for that we use a Input value on editor component
-
       })
-  
+    else // get facilities
+      this.facilitiesService.getFacilities().subscribe((value) =>{
+        this.facilities = value;
+      })
+      
     this.editing = true;
   }
 
@@ -156,6 +150,27 @@ export class PageEditComponent {
 
   receivePageText(text : string){
     this.pageInfo.texto = text;
+  }
+
+  editFacility(facility: Facilidad){
+    this.facilityInfo = facility;
+  }
+  cancelEditFacility(){
+    this.facilityInfo = null;
+    this.facilitiesService.getFacilities().subscribe((value) =>{
+      this.facilities = value;
+    })
+  }
+  receiveFacilityText(text : string){
+    if(this.facilityInfo)
+      this.facilityInfo.texto = text;
+  }
+
+ async saveFacility(){
+    if(this.facilityInfo){
+      this.facilityInfo = await this.facilitiesService.updateFacility(this.facilityInfo);
+      
+    }
   }
 }
 

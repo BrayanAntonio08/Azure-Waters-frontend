@@ -1,11 +1,9 @@
+import { Image } from "./Image";
+
 export class Facilidad {
   facilidadId: number = 1;
-  texto?: string;
+  texto: string = '';
   imagenId?: number;
-  imagen?: Imagen;
+  imagen?: Image;
 }
 
-export interface Imagen {
-  imagenId: number;
-  url: string;
-}
