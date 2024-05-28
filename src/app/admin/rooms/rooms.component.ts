@@ -27,6 +27,23 @@ export class RoomsComponent {
   roomTypeImage: Image = new Image();
 
   editingRoomType: RoomType = new RoomType();
+  nuevaHabitacion: Room = {
+    id: 0,
+    number: 0,
+    type_id: 0,
+    active: true,
+    reserved: false,
+    checking: true
+  };
+
+  editingRoom: Room = {
+    id: 0,
+    number: 0,
+    type_id: 0,
+    active: true,
+    reserved: false,
+    checking: true
+  };
 
   constructor(private roomService: RoomService, private imageService: ImageService) {
     roomService.ListRoomTypes().then((value) => (this.roomTypes = value));
@@ -98,5 +115,85 @@ export class RoomsComponent {
       }
       reader.readAsDataURL(this.fileImg);
     }
+  }
+
+  deleteRoom(id: number) {
+    this.roomService.deleteRoom(id).subscribe(() => {
+      console.log("Habitación eliminada correctamente.");
+      this.rooms = this.rooms.filter(room => room.id !== id);
+      this.displayRooms = this.displayRooms.filter(room => room.id !== id);
+    }, error => {
+      console.error("Error al eliminar la habitación:", error);
+    });
+  }
+
+  openAddRoomModal(): void {
+    const modal = document.getElementById('addRoomModal');
+    if (modal) {
+      modal.style.display = 'block';
+    }
+  }
+
+  closeAddRoomModal(): void {
+    const modal = document.getElementById('addRoomModal');
+    if (modal) {
+      modal.style.display = 'none';
+    }
+  }
+
+  agregarHabitacion(): void {
+    this.roomService.createRoom(this.nuevaHabitacion).subscribe(
+      () => {
+        console.log("Habitación creada correctamente.");
+        this.closeAddRoomModal();
+        this.getRooms();
+        this.nuevaHabitacion = {
+          id: 0,
+          number: 0,
+          type_id: 0,
+          active: true,
+          reserved: false,
+          checking: true
+        };
+      },
+      (error) => {
+        console.error("Error al crear la habitación:", error);
+      }
+    );
+  }
+
+  openEditRoomModal(room: Room): void {
+    this.editingRoom = { ...room };
+    const modal = document.getElementById('editRoomModal');
+    if (modal) {
+      modal.style.display = 'block';
+    }
+  }
+
+  closeEditRoomModal(): void {
+    const modal = document.getElementById('editRoomModal');
+    if (modal) {
+      modal.style.display = 'none';
+    }
+  }
+
+  actualizarHabitacion(): void {
+    this.roomService.updateRoom(this.editingRoom.id, this.editingRoom).subscribe(
+      () => {
+        console.log("Habitación actualizada correctamente.");
+        this.closeEditRoomModal();
+        this.getRooms();
+      },
+      (error) => {
+        console.error("Error al actualizar la habitación:", error);
+      }
+    );
+  }
+
+  getRooms(): void {
+    this.roomService.ListRooms().then((value) => {
+      this.rooms = value;
+      this.displayRooms = this.rooms.filter(x => x.type_id === this.activeRoomType);
+    });
   }
 }
