@@ -7,11 +7,12 @@ import { TipoHabitacion } from '../../core/models/season';
 import { RoomType } from '../../core/models/RoomType';
 import { ReservationRoom, Room } from '../../core/models/Room';
 import { ReservationService } from '../../core/services/reservation.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-book-room',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './book-room.component.html',
   styleUrl: './book-room.component.css'
 })
@@ -25,9 +26,10 @@ export class BookRoomComponent {
   // variables de entrada para la transacción
   reservation : Reservation = new Reservation();
   room: ReservationRoom = new ReservationRoom();
+  availableRooms: any[] = [];
   codigoReserva = "";
   
-  constructor(private roomService: RoomService, private reservationService: ReservationService){
+  constructor(private roomService: RoomService, private reservationService: ReservationService){  
     roomService.ListRoomTypes().then(value => {
       this.roomTypes = value;
       this.reservation.room_type_id = this.roomTypes[0].id;
