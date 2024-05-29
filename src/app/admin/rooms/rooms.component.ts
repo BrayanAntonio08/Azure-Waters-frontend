@@ -44,6 +44,7 @@ export class RoomsComponent {
     this.displayRooms = this.rooms.filter(x => x.type_id === this.activeRoomType)
   }
 
+
   openUpdateRoomTypeForm() {
     let temp = this.roomTypes.find(item => item.id === this.activeRoomType);
     this.editingRoomType = temp ? temp : this.editingRoomType;
@@ -98,5 +99,9 @@ export class RoomsComponent {
       }
       reader.readAsDataURL(this.fileImg);
     }
+  }
+
+  markActive(room: Room){
+    this.roomService.markActive(room);
   }
 }

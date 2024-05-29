@@ -64,6 +64,10 @@ export class RoomService {
   finishRevision(id_room:number){
     this.http.delete(`${this.url}/liberar/${id_room}`).subscribe(res => console.log(res));
   }
+
+  markActive(room: Room){
+    this.http.put(`${this.url}/activa`, room).subscribe(res => console.log(res));
+  }
 }
 
 
