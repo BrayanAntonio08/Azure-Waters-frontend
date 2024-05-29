@@ -46,9 +46,21 @@ export class BookRoomComponent {
         }else{
 
           this.estado = "failed";
+          this.listarHabitacionesDisponibles();
         }
       }
     )
+  }
+
+  listarHabitacionesDisponibles() {
+    this.roomService.getRoom().subscribe(
+      (rooms: Room[]) => {
+        this.availableRooms = rooms.filter(room => !room.checking && (room.type_id === 2 || room.type_id === 3));
+      },
+      (error) => {
+        console.error('Error al listar habitaciones disponibles', error);
+      }
+    );
   }
 
   cancelBooking(){
