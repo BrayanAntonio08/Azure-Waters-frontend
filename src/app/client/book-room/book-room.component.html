@@ -72,18 +72,27 @@
     </p>
     }
     @case ("failed") {
-    <!-- cae en este escenario cuando no hay habitaciones disponibles para la reserva -->
-    <div class="row">
-        <div>
-        <button type="button" class="btn btn-outline-secondary h-auto mb-2" (click)="estado = ''">Volver</button>
+        <div class="failed-section">
+            <div class="row">
+                <div>
+                    <button type="button" class="btn btn-outline-secondary btn-back" (click)="estado = ''">Volver</button>
+                </div>
+                <p class="error-message">Lo sentimos! En este momento no tenemos habitaciones disponibles.</p>
+            </div>
+            <div class="container">
+                <p>Ya que no disponemos de habitaciones según su solicitud, se le presentan las siguientes alternativas:</p>
+                <div class="row">
+                    <div class="col-12" *ngFor="let availableRoom of availableRooms">
+                        <p class="room-info">En el rango de fechas seleccionado, tenemos disponible la habitación número {{ availableRoom.number }}, esta es del tipo 
+                            <span class="room-type" *ngIf="availableRoom.type_id === 1">Estándar</span>
+                            <span class="room-type" *ngIf="availableRoom.type_id === 2">Familiar</span>
+                            <span class="room-type" *ngIf="availableRoom.type_id === 3">De lujo</span>
+                        </p>
+                    </div>
+                </div>          
+            </div>
         </div>
-        
-        <p>Lo sentimos! En este momento no tenemos habitaciones disponibles.</p>
-    </div>
-    <div class="container">
-        <p>Ya que no disponemos de habitaciones según su solicitud, se le presentan las siguientes alternativas:</p>
-    </div>
-    }
+    }    
     @default {
     <h3>Consulta de habitaciones</h3>
     <div class="mt-3 row ">

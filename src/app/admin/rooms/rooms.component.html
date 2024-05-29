@@ -47,14 +47,14 @@
             </thead>
             <tbody>
                 @for (r of displayRooms; track $index) {
-                <tr>
-                    <td>{{r.number}}</td>
-                    <td><input type="checkbox" [(ngModel)]="r.active" (change)="markActive(r)"></td>
-                    <td class="d-flex justify-content-end">
-                        <button class="btn btn-success">Editar</button>
-                        <button class="btn btn-danger">Eliminar</button>
-                    </td>
-                </tr>
+                    <tr>
+                        <td>{{r.number}}</td>
+                        <td><input type="checkbox" [(ngModel)]="r.active" (change)="markActive(r)"></td>
+                        <td class="d-flex justify-content-end">
+                            <button class="btn btn-success" (click)="openEditRoomModal(r)">Editar</button>
+                          <button class="btn btn-danger" (click)="deleteRoom(r.id)">Eliminar</button>
+                        </td>
+                      </tr>
                 }
             </tbody>
         </table>
@@ -101,3 +101,66 @@
 
 }
 }
+<button class="btn btn-primary btn-add-room" (click)="openAddRoomModal()">Agregar Habitación</button>
+
+<div id="addRoomModal" class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <h5 class="modal-title">Agregar Nueva Habitación</h5>
+        <button type="button" class="close" data-dismiss="modal" (click)="closeAddRoomModal()">&times;</button>
+      </div>
+      
+      <div class="modal-body">
+        <form (ngSubmit)="agregarHabitacion()">
+          <div class="form-group">
+            <label for="roomNumber">Número de Habitación:</label>
+            <input type="number" class="form-control" id="roomNumber" [(ngModel)]="nuevaHabitacion.number" name="roomNumber" required>
+          </div>
+          <div class="form-group">
+            <label for="roomTypeId">Tipo de Habitación:</label>
+            <select class="form-control" id="roomTypeId" [(ngModel)]="nuevaHabitacion.type_id" name="roomTypeId" required>
+              <option *ngFor="let roomType of roomTypes" [value]="roomType.id">{{ roomType.name }}</option>
+            </select>
+          </div>
+
+          <div class="modal-buttons">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeAddRoomModal()">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          </div>
+        </form>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<div id="editRoomModal" class="modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Editar Habitación</h5>
+          <button type="button" class="close" data-dismiss="modal" (click)="closeEditRoomModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="actualizarHabitacion()">
+            <div class="form-group">
+              <label for="editRoomNumber">Número de Habitación:</label>
+              <input type="number" class="form-control" id="editRoomNumber" [(ngModel)]="editingRoom.number" name="editRoomNumber" required>
+            </div>
+            <div class="form-group">
+              <label for="editRoomTypeId">Tipo de Habitación:</label>
+              <select class="form-control" id="editRoomTypeId" [(ngModel)]="editingRoom.type_id" name="editRoomTypeId" required>
+                <option *ngFor="let roomType of roomTypes" [value]="roomType.id">{{ roomType.name }}</option>
+              </select>
+            </div>
+            <div class="modal-buttons">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeEditRoomModal()">Cancelar</button>
+              <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>

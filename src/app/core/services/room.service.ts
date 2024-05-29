@@ -4,7 +4,7 @@ import { RoomType } from '../models/RoomType';
 import { Room } from '../models/Room';
 import { catchError, Observable } from 'rxjs';
 import { Reservation } from '../models/Reservation';
-
+import { switchMap, forkJoin, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -68,6 +68,23 @@ export class RoomService {
   markActive(room: Room){
     this.http.put(`${this.url}/activa`, room).subscribe(res => console.log(res));
   }
-}
+  deleteRoom(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}/delete/${id}`);
+  }
+
+  createRoom(room: Room): Observable<void> {
+    return this.http.post<void>(`${this.url}/create`, room);
+  }
+  
+  updateRoom(id: number, updatedRoom: Room): Observable<void> {
+    return this.http.put<void>(`${this.url}/update/${id}`, updatedRoom);
+  }
+
+  checkAvailability(fechaInicio: Date, fechaFinal: Date, idTipoHabitacion: number): Observable<any> {
+    return this.http.get<any>(`${this.url}/disponibilidad?fechaInicio=${fechaInicio}&fechaFinal=${fechaFinal}&idTipoHabitacion=${idTipoHabitacion}`);
+  }
+  
+  }
+
 
 
