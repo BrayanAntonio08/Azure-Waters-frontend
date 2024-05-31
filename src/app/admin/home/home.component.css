@@ -1,0 +1,38 @@
+.welcome-text {
+    font-family: Arial, sans-serif; 
+    font-size: 22px;
+    font-weight: bold; 
+    text-align: center; 
+  
+    /* Margin and padding */
+    margin: 50px auto; 
+    padding: 20px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  }
+  
+  h1{
+    text-align: center;
+  }
+
+  #barra-busqueda {
+    width: 300px; 
+    margin: 20px auto 0 0; 
+    display: flex; 
+    justify-content: space-between; 
+  }
+  
+  #campo-busqueda {
+    flex: 1; 
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+  
+  #boton-busqueda {
+    padding: 10px;
+    background-color: #000;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-right: 20px; 
+  }
+  
