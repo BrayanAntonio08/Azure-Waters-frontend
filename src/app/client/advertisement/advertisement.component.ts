@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { AdvertisementService } from '../../core/services/advertisement.service';
+import { Advertisement } from '../../core/models/Advertisment';
 
 interface Image {
   imgSrc: string;
@@ -15,35 +17,22 @@ interface Image {
   styleUrl: './advertisement.component.css',
 })
 export class AdvertisementComponent implements OnInit {
+  ads: Advertisement[] = [];
   images: Image[] = [];
   selectedIndex = 0;
 
+  constructor(private adService: AdvertisementService){}
+
   ngOnInit(): void {
-    this.loadImages();
+    this.loadAds();
 
     //Setear el cambio de imagen cada 5 segundos
     setInterval(()=>{
-      this.selectedIndex = (this.selectedIndex+1)%this.images.length;
+      this.selectedIndex = (this.selectedIndex+1)%this.ads.length;
     }, 5000);
   }
 
-  loadImages() {
-    this.images = [
-      {
-        imgAlt: 'Imperial',
-        imgSrc: 'assets/img/cerveza.webp',
-        link: 'https://imperial.cr/promo/',
-      },
-      {
-        imgAlt: 'Piscina',
-        imgSrc: 'assets/img/piscina.jpeg',
-        link: 'https://www.termaleslaureles.com',
-      },
-      {
-        imgAlt: 'Azure',
-        imgSrc: 'assets/img/azure.png',
-        link: 'https://azure.microsoft.com',
-      },
-    ];
+  loadAds() {
+    this.adService.listAdds().then(value => this.ads = value);
   }
 }

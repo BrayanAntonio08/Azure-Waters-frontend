@@ -1,1 +1,56 @@
-<p>advertisment-manager works!</p>
+<h1>Administrar publicidad</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-6">
+    
+            <div class="d-flex justify-content-center mt-5">
+                <label for="imgFile">
+                    <div class="img-section">
+                        @if(advertisement.image.url.length > 0){
+                            <img [src]="advertisement.image.url" class="image">
+                        }@else {
+                            Suelte el archivo aqui o de click para abrir el explorador
+                        }
+                    </div>
+                </label>
+                <input type="file" id="imgFile" hidden (change)="selectFile($event)"/>
+            </div>
+            <div class="my-3 col-12 col-md-10 col-lg-8 mx-auto">
+                <p>URL para redireccionar</p>
+                <input type="text" [(ngModel)]="advertisement.url" class="form-control " />
+            </div>
+            <div class="row justify-content-center">
+                <button class="btn btn-primary col-6 col-md-4 col-lg-3" (click)="save()">Guardar</button>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <!-- tabla -->
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>URL</th>
+                        <th></th>
+                    </tr>
+                </thead>
+    
+                <tbody>
+                    @for(add of advertisements; track $index){
+                    <tr>
+                        <td>
+                            {{add.url}}
+                        </td>
+                        <td>
+                            <button class="btn btn-outline-secondary" (click)="edit(add)">
+                                <fa-icon [icon]="faPen" />
+                            </button>
+                            <button class="btn btn-outline-secondary" (click)="delete(add)">
+                                <fa-icon [icon]="faTrash" />
+                            </button>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

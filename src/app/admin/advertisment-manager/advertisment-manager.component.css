@@ -1,0 +1,16 @@
+.img-section{
+    width: 200px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px dashed #666;
+    padding: 10px;
+    text-align: center;
+    overflow: hidden;
+}
+
+.image{
+    width: 100%;
+    height: auto;
+}

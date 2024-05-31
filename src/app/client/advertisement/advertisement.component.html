@@ -1,14 +1,14 @@
 <div class="advertisement-container">
-  @if (images.length > 0) {
+  @if (ads.length > 0) {
   <div class="ad-carousel">
-    @for (img of images; track $index) {
+    @for (ad of ads; track $index) {
     <a
-      href="{{ img.link }}"
+      [href]="ad.url"
       target="_blank"
       [ngClass]="{ 'active-img': $index === selectedIndex }"
       class="fade"
     >
-      <img src="{{ img.imgSrc }}" alt="{{ img.imgAlt }}" />
+      <img [src]="ad.image.url" [alt]="ad.image.alt" />
     </a>
     }
   </div>
