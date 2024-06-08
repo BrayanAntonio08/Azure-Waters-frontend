@@ -62,6 +62,7 @@ export class AdvertismentManagerComponent {
   cancel(){
     this.advertisement = new Advertisement();
     this.adImgFile = undefined;
+    this.loadAdds();
   }
 
   async save(){
