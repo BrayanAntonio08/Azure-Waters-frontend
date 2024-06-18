@@ -8,6 +8,7 @@ import { StatusComponent } from "./status/status.component";
 import { RoomAvailabilityComponent } from "./room-availability/room-availability.component";
 import { AdvertismentManagerComponent } from "./advertisment-manager/advertisment-manager.component";
 import { SeasonManagementComponent } from "./season-management/season-management.component";
+import { OfferManagementComponent } from "./offer-management/offer-management.component";
 
 
 export const ADMIN_ROUTES : Routes = [
@@ -22,6 +23,7 @@ export const ADMIN_ROUTES : Routes = [
             { path: 'status', component: StatusComponent},
             { path: 'availability', component: RoomAvailabilityComponent},
             { path: 'ads', component: AdvertismentManagerComponent},
+            { path: 'offers', component: OfferManagementComponent},
             { path: 'seasons', component: SeasonManagementComponent},
         ]
     }
