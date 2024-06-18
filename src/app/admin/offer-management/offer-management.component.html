@@ -1,0 +1,72 @@
+<h2>
+    Gestion de ofertas
+</h2>
+<div class="container">
+    <button type="button" class="btn btn-primary" (click)="create()">Agregar</button>
+    <br>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Inicio</th>
+                <th>Fin</th>
+                <th>Descuento</th>
+                <th>Habitacion afectada</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for(offer of offers; track $index){
+            <tr>
+                <td>{{offer.start}}</td>
+                <td>{{offer.end}}</td>
+                <td>{{offer.discount}} %</td>
+                <td>{{offer.room_type_name}}</td>
+                <td>
+                    <button class="btn" (click)="edit(offer)"><fa-icon [icon]="iconEdit" /> Editar</button>
+                    <button class="btn" (click)="delete(offer.id)"><fa-icon [icon]="iconDelete" /> Eliminar</button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if(formVisible){
+<div class="modal-container">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Formulario de oferta</h5>
+                <button type="button" class="btn-close" (click)="cancelChages()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-2">
+                    <label for="fechaInicio" >Fecha de Inicio:</label>
+                    <input type="date" id="fechaInicio" name="fechaInicio" class="form-control" [(ngModel)]="offer.start" required>
+                </div>
+                <div class="mb-2">
+                    <label for="fechaFin">Fecha de Fin:</label>
+                    <input type="date" id="fechaFin" name="fechaFin" class="form-control" [(ngModel)]="offer.end" required>
+                </div>
+                <div class="mb-2">
+                    <label for="descuento">Descuento:</label>
+                    <input type="number" id="descuento" name="descuento" class="form-control" [(ngModel)]="offer.discount" required>
+                </div>
+            
+                <div class="mb-2">
+                    <label for="idTipo">Tipo de Habitación:</label>
+                    <select id="idTipo" name="idTipo" [(ngModel)]="offer.room_type_id" class="form-select" required>
+                        @for(type of roomTypes; track type.id){
+                            <option [value]="type.id">{{ type.name }}</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer mt-3">
+                <button type="button" class="btn me-2" (click)="cancelChages()">Cancelar</button>
+                <button type="button" class="btn btn-primary" (click)="saveChanges()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+}
