@@ -3,11 +3,11 @@ import { FormsModule } from '@angular/forms';
 import { Client } from '../../core/models/Client';
 import { Reservation } from '../../core/models/Reservation';
 import { RoomService } from '../../core/services/room.service';
-import { TipoHabitacion } from '../../core/models/season';
 import { RoomType } from '../../core/models/RoomType';
 import { ReservationRoom, Room } from '../../core/models/Room';
 import { ReservationService } from '../../core/services/reservation.service';
 import { CommonModule } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-book-room',
@@ -29,7 +29,7 @@ export class BookRoomComponent {
   availableRooms: any[] = [];
   codigoReserva = "";
   
-  constructor(private roomService: RoomService, private reservationService: ReservationService){  
+  constructor(private roomService: RoomService, private reservationService: ReservationService, private msg: ToastrService){  
     roomService.ListRoomTypes().then(value => {
       this.roomTypes = value;
       this.reservation.room_type_id = this.roomTypes[0].id;
@@ -37,6 +37,16 @@ export class BookRoomComponent {
   }
 
   buscarHabitacion() {
+    if(!this.reservation.arriving || !this.reservation.departing){
+      this.msg.warning('Debe definir las fechas de la reserva')
+      return;
+    }
+
+    if(this.reservation.arriving >= this.reservation.departing){
+      this.msg.warning('La fecha de salida no puede ser anterior a la fecha de llegada')
+      return;
+    }
+
     this.roomService.checkRoom(this.reservation).then(
       (response) => {
         if(response.success){
@@ -69,7 +79,45 @@ export class BookRoomComponent {
     this.estado = '';
   }
 
+  validarCampos():boolean{
+    if(
+      this.cliente.id === ''
+      || this.cliente.name === ''
+      || this.cliente.lastName === ''
+      || this.cliente.email === ''
+      || this.cliente.creditCard === ''
+    ){
+      this.msg.warning('Es necesario que complete todos los datos');
+      return false;
+    }
+
+    const numericPattern = /^\d+$/;
+    const namePattern = /^[a-zA-Z\s]+$/;
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const creditCardPattern = /^(\d{4} \d{4} \d{4} \d{4})$/;
+
+    let format = true;
+    if(!numericPattern.test(this.cliente.id)){
+      this.msg.warning('Formato de identificación incorrecto');
+      format = false;
+    }
+    if(!namePattern.test(this.cliente.name) || !namePattern.test(this.cliente.lastName)){
+      this.msg.warning('Formato de nombre o apellidos incorrecto');
+      format = false;
+    }
+    if(!emailPattern.test(this.cliente.email)){
+      this.msg.warning('Formato de correo incorrecto');
+      format = false;
+    }
+    if(!creditCardPattern.test(this.cliente.creditCard)){
+      this.msg.warning('Formato de tarjeta incorrecto');
+      format = false;
+    }
+    return format;
+  }
   crearReservacion() {
+    if(!this.validarCampos())
+      return
     // tranfer variables to reservation object
     this.reservation.client_id = this.cliente.id;
     this.reservation.client_lastname = this.cliente.lastName;
