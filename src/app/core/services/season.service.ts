@@ -27,6 +27,6 @@ export class SeasonService {
   }
 
   updateTemporada(temporadaData: Temporada): Observable<any> {
-    return this.http.put<any>(`${this.url}/${temporadaData.idTemporada}`, temporadaData);
+    return this.http.put<any>(`${this.url}/${temporadaData.id}`, temporadaData);
   }
 }
