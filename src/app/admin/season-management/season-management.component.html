@@ -1,60 +1,81 @@
-<div *ngIf="temporadas.length > 0">
-    <h2>Temporadas Disponibles</h2>
-    <table class="temporada-table">
+<h1>Gestion de temporadas</h1>
+
+<div class="mb-5">
+    <div class="p-3">
+        <div class="year-bar">
+            @for(period of periods; track $index){
+                <div class="period-block"[ngStyle]="{
+                    'background-color': color[period.color],
+                    'width': period.end+'%',
+                    'left':period.start+'%'}"> </div>
+            }
+            @for(month of months; track $index){
+                <div class="month"></div>
+            }
+        </div>
+    </div>
+    <div class="d-flex p-3">
+        @for(month of months; track $index){
+            <div class="col-1 text-center">{{month.short}}<span class="d-none d-xl-inline">{{month.complete}}</span></div>
+        }
+    </div>
+</div>
+
+@if(temporadas.length > 0){
+    <table class="table">
         <thead>
             <tr>
-                <th>ID Temporada</th>
                 <th>Fecha de Inicio</th>
                 <th>Fecha de Fin</th>
-                <th>Descuento</th>
-                <th>Tipo de Habitación</th>
-                <th colspan="2">Acciones</th>
+                <th>Incremento en precio</th>
+                <th colspan="2"></th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let temporada of temporadas">
-                <td>{{ temporada.idTemporada }}</td>
-                <td>{{ temporada.fechaInicio | date }}</td>
-                <td>{{ temporada.fechaFin | date }}</td>
-                <td>{{ temporada.descuento }}</td>
-                <td>{{ temporada.idTipo }}</td>
-                <td>
-                    <button class="btn btn-primary" (click)="openUpdateSeasonModal(temporada)">Actualizar</button>
-                </td>
-                <td>
-                    <button class="btn btn-danger" (click)="eliminarTemporada(temporada.idTemporada)">Eliminar</button>
-                </td>
-            </tr>
+            @for(temporada of temporadas; track $index){
+                <tr>
+                    <td>
+                        <input type="text" pattern="\d{2}-\d{2}" placeholder="MM-DD" [(ngModel)]="temporada.fechaInicio" class="form-control" (input)="updateDates()">
+                    <td>
+                        <input type="text" pattern="\d{2}-\d{2}" placeholder="MM-DD" [(ngModel)]="temporada.fechaFin" disabled="true" class="form-control">
+                    </td>
+                    <td class="text-center">{{ temporada.incremento }} %</td>
+                    <td>
+                        <button class="btn btn-primary">Actualizar</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger">Eliminar</button>
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
-</div>
-<div *ngIf="temporadas.length === 0">
+}@else{
     <p>No hay temporadas disponibles.</p>
-</div>
+}
 
 <button class="btn btn-success" (click)="openAddSeasonModal()">Agregar Temporada</button>
 
 <!-- Modal para agregar temporada -->
 <div id="addSeasonModal" class="modal">
-    <div class="modal-content">
-        <span class="close" (click)="closeAddSeasonModal()">&times;</span>
-        <h2>Agregar Temporada</h2>
-        <form (submit)="agregarActualizarTemporada()">
-            <label for="fechaInicio">Fecha de Inicio:</label>
-            <input type="date" id="fechaInicio" name="fechaInicio" [(ngModel)]="nuevaTemporada.fechaInicio" required>
+    <div class="modal-dialog">
+        
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Informacion de Temporada</h4>
+                <button type="button" class="btn-close" (click)="closeAddSeasonModal()"></button>
+            </div>
+            <div class="modal-body">
+                <label for="fechaInicio">Fecha de Inicio:</label>
+                <input type="text" id="fechaInicio" class="form-control" [(ngModel)]="date" placeholder="MM-DD" required>
+        
+                <label for="descuento">Incremento:</label>
+                <input type="number" id="descuento" class="form-control" [(ngModel)]="incremento" required>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="guardarNuevaTemporada()">Agregar</button>
 
-            <label for="fechaFin">Fecha de Fin:</label>
-            <input type="date" id="fechaFin" name="fechaFin" [(ngModel)]="nuevaTemporada.fechaFin" required>
-
-            <label for="descuento">Descuento:</label>
-            <input type="number" id="descuento" name="descuento" [(ngModel)]="nuevaTemporada.descuento" required>
-
-            <label for="idTipo">Tipo de Habitación:</label>
-            <select id="idTipo" name="idTipo" [(ngModel)]="nuevaTemporada.idTipo" required>
-                <option *ngFor="let tipo of tiposHabitacion" [value]="tipo.id">{{ tipo.nombre }}</option>
-            </select>
-
-            <button type="submit" class="btn btn-primary">Agregar</button>
-        </form>
+            </div>
+        </div>
     </div>
 </div>
