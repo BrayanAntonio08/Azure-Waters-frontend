@@ -4,6 +4,7 @@ import { SeasonService } from '../../core/services/season.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NgIf } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-season-management',
@@ -33,37 +34,15 @@ export class SeasonManagementComponent implements OnInit {
     { short: 'Dic', complete: 'iembre' }
   ]
   color = [
-    '#222',
-    "#CC4722",  // Rojo anaranjado
-    "#3357FF",  // Azul vibrante
-    "#33FFFF",  // Cian
-    "#FF33FF",  // Magenta
-    "#FF3333",  // Rojo brillante
-    "#33FF33",  // Verde brillante
-    "#3333FF",  // Azul eléctrico
-    "#FFA500",  // Naranja
-    "#800080",  // Púrpura
-    "#008080",  // Verde azulado
-    "#000000",  // Negro
-    "#FFFFFF",  // Blanco
-    "#C0C0C0",  // Plata
-    "#808080",  // Gris
-    "#800000",  // Marrón
-    "#808000",  // Oliva
-    "#008000",  // Verde
-    "#000080",  // Azul marino
-    "#0000FF",  // Azul puro
-    "#FF0000",  // Rojo puro
-    "#00FF00",  // Verde puro
-    "#FFFF00",  // Amarillo puro
-    "#00FFFF",  // Aqua
-    "#FF00FF",  // Fucsia
-    "#ADD8E6",  // Azul claro
-    "#F08080",  // Rojo claro
+    '#222477', "#CC4722", "#115799", "#335555", "#993365", "#F43233", "#33FF33", "#3333FF",
+    "#FFA500", "#800080", "#008080", "#000000", "#FFFFFF", "#C0C0C0", "#808080", "#800000",
+    "#808000", "#008000", "#000080", "#0000FF", "#FF0000", "#00FF00", "#FFFF00", "#00FFFF",
+    "#FF00FF", "#ADD8E6", "#F08080"
   ]
   periods: Period[] = [];
+  errorMsg = "";
 
-  constructor(private seasonService: SeasonService) { }
+  constructor(private seasonService: SeasonService, private msg: ToastrService) { }
 
   ngOnInit(): void {
     this.getTemporada();
@@ -93,6 +72,9 @@ export class SeasonManagementComponent implements OnInit {
   }
 
   createSeasons() {
+    if(this.temporadas.some(temporada => temporada.fechaFin == "NaN-NaN" || temporada.fechaInicio == "NaN-NaN")) return
+
+
     this.periods = [];
     const year_days = 365
     const startDate: Date = new Date(2000, 0, 1)
@@ -118,19 +100,19 @@ export class SeasonManagementComponent implements OnInit {
       let auxStartDate = new Date(aux.fechaInicio)
 
       // Calcula el total de días de duración de la temporada
-      let diasDuracion = Math.floor((auxEndDate.getTime() - auxStartDate.getTime()) / msPorDia) + 1;
+      let diasDuracion = (auxEndDate.getTime() - auxStartDate.getTime()) / msPorDia + 1;
       // Calcula el porcentaje del año que abarca la duración de la temporada
-      let duracionPorcentaje = Math.ceil((diasDuracion / year_days) * 100);
+      let duracionPorcentaje = parseFloat(((diasDuracion / year_days) * 100).toFixed(4));
       let inicioPorcentaje = 0;
 
       if(diasDuracion < 0){
-        diasDuracion = Math.floor((auxEndDate.getTime() - startDate.getTime()) / msPorDia) + 1;
-        duracionPorcentaje = Math.ceil((diasDuracion / year_days) * 100);
+        diasDuracion = ((auxEndDate.getTime() - startDate.getTime()) / msPorDia) + 1;
+        duracionPorcentaje = parseFloat(((diasDuracion / year_days) * 100).toFixed(4));
       }else{
         //calcular distancia de dias entre enero 1 y la fecha de inicio
-        const diasInicio = Math.floor((auxStartDate.getTime() - startDate.getTime()) / msPorDia);
+        const diasInicio = (auxStartDate.getTime() - startDate.getTime()) / msPorDia;
         // Calcula el porcentaje del año en el que inicia la temporada
-        inicioPorcentaje = Math.ceil((diasInicio / year_days) * 100);
+        inicioPorcentaje = parseFloat(((diasInicio / year_days) * 100).toFixed(4));
       }
 
       let period = new Period();
@@ -149,10 +131,10 @@ export class SeasonManagementComponent implements OnInit {
     }, auxTemporadas[0]);
     let auxMaxStartDate = new Date(auxMax.fechaInicio)
 
-    const diasInicioFinal = Math.floor((auxMaxStartDate.getTime() - startDate.getTime()) / msPorDia) + 1;
-    let inicioFinalPorcentaje = Math.ceil(diasInicioFinal/year_days *100);
-    const diasDuracionFinal = Math.floor((endDate.getTime() - auxMaxStartDate.getTime()) / msPorDia) + 1;
-    let duracionFinal = Math.ceil(diasDuracionFinal/year_days*100);
+    const diasInicioFinal = (auxMaxStartDate.getTime() - startDate.getTime()) / msPorDia;
+    let inicioFinalPorcentaje = parseFloat((diasInicioFinal/year_days *100).toFixed(4));
+    const diasDuracionFinal = (endDate.getTime() - auxMaxStartDate.getTime()) / msPorDia + 1;
+    let duracionFinal = parseFloat((diasDuracionFinal/year_days*100).toFixed(4));
     let periodFinal: Period = {
       color: auxMax.id,
       start:inicioFinalPorcentaje,
@@ -197,12 +179,30 @@ export class SeasonManagementComponent implements OnInit {
   }
 
   eliminarTemporada(id: number): void {
+    
     this.seasonService.deleteTemporada(id).subscribe(
       () => {
-        this.getTemporada();
+        this.temporadas = this.temporadas.filter(x => x.id !== id);
+        this.updateDates();
+        this.seasonService.updateAll(this.temporadas).then(
+          value => {
+            this.temporadas = value.map(x => {
+              const fechaInicioFormateada = x.fechaInicio.substring(5);
+              const fechaFinFormateada = x.fechaFin.substring(5);
+    
+              // Devuelve un nuevo objeto con las fechas modificadas
+              return {
+                ...x,
+                fechaInicio: fechaInicioFormateada,
+                fechaFin: fechaFinFormateada
+              };
+            });
+            this.createSeasons();
+          }
+        )
       },
       (error) => {
-        console.error('Error al eliminar la temporada:', error);
+        this.msg.error('Error al eliminar la temporada');
       }
     );
   }
@@ -227,9 +227,33 @@ export class SeasonManagementComponent implements OnInit {
     }
   }
 
-  guardarNuevaTemporada(){
-    console.log(this.incremento);
-    console.log(this.date);
+  async guardarNuevaTemporada(){
+    this.errorMsg = "";
+
+    if(this.incremento.toString().length == 0 || this.date.length == 0){
+      this.errorMsg = "Debe completar los campos";
+      return
+    }
+
+    const regex = /^(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])$/;
+    if(!regex.test(this.date)){
+      this.errorMsg = "Formato de fecha incorrecto";
+      return;
+    }
+
+    let newElement = new Temporada();
+    newElement.fechaInicio = this.date;
+    newElement.incremento = this.incremento;
+
+    this.temporadas.push(newElement);
+    this.updateDates();
+    // Acá se debe llamar al servicio que actualice las temporadas
+    this.seasonService.updateAll(this.temporadas).then(value => {
+      this.closeAddSeasonModal();
+      this.msg.success("Modificación completa correctamente");
+
+      this.getTemporada();
+    })
   }
 
   // agregarActualizarTemporada(): void {
