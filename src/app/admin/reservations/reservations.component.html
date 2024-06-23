@@ -1,1 +1,49 @@
-<p>reservations works!</p>
+<div class="reservation-list">
+  <div *ngIf="processingRequest" class="processing-request">
+    <p>Procesando solicitud...</p>
+  </div>
+
+  <div *ngIf="!processingRequest && !selectedReservation">
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha de Inicio</th>
+          <th>Fecha de Fin</th>
+          <th>Nombre del Cliente</th>
+          <th>Tipo de Habitación</th>
+          <th> </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let reservation of reservations">
+          <td>{{ reservation.arriving | date }}</td>
+          <td>{{ reservation.departing | date }}</td>
+          <td>{{ reservation.client_name }} {{ reservation.client_lastname }}</td>
+          <td>{{ getRoomType(reservation)}}</td>
+          <td>
+            <button (click)="viewDetails(reservation)">Ver detalles</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="pagination">
+      <button (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1">Anterior</button>
+      <span>Página {{ currentPage }}</span>
+      <button (click)="onPageChange(currentPage + 1)" [disabled]="reservations.length < pageSize">Siguiente</button>
+    </div>
+  </div>
+  
+  <div *ngIf="selectedReservation">
+    <h2>Detalles de la Reservación</h2>
+    <button (click)="backToList()">Volver</button>
+    <div class="reservation-details">
+      <p><strong>Fecha de Inicio:</strong> {{ selectedReservation.arriving | date }}</p>
+      <p><strong>Fecha de Fin:</strong> {{ selectedReservation.departing | date }}</p>
+      <p><strong>Nombre del Cliente:</strong> {{ selectedReservation.client_name }} {{ selectedReservation.client_lastname }}</p>
+      <p><strong>Tipo de Habitación:</strong> {{ getRoomType(selectedReservation) }}</p>
+      <p><strong>Correo electrónico:</strong> {{ selectedReservation.client_email }}</p>
+      <p><strong>ID de reserva:</strong> {{ selectedReservation.id }}</p>
+    </div>
+  </div>
+</div>
