@@ -1,34 +1,149 @@
-<div class="room-availability">
-  <h2>Disponibilidad de Habitaciones</h2>
+<!--<div class="container">
+  <h2>Room Availability</h2>
 
-  <div class="search-bar">
-    <label for="fechaInicio">Fecha de Inicio:</label>
-    <input type="date" id="fechaInicio" [(ngModel)]="fechaInicio" name="fechaInicio">
+  <form (ngSubmit)="buscarDisponibilidad()">
+    <div class="form-group">
+      <label for="fechaInicio">Start Date:</label>
+      <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" [(ngModel)]="fechaInicio" required>
+    </div>
+    <div class="form-group">
+      <label for="fechaFin">End Date:</label>
+      <input type="date" class="form-control" id="fechaFin" name="fechaFin" [(ngModel)]="fechaFin" required>
+    </div>
+    <div class="form-group">
+      <label for="idTipo">Room Type ID:</label>
+      <input type="number" class="form-control" id="idTipo" name="idTipo" [(ngModel)]="idTipo" required>
+      <div *ngIf="!idTipo || idTipo < 1" class="invalid-feedback">
+        Please enter a valid room type ID (positive number).
+      </div>
+    </div>
 
-    <label for="fechaFinal">Fecha Final:</label>
-    <input type="date" id="fechaFinal" [(ngModel)]="fechaFinal" name="fechaFinal">
+    <button type="submit" class="btn btn-primary">Check Availability</button>
+  </form>
 
-    <label for="tipoHabitacion">Tipo de Habitación:</label>
-    <select id="tipoHabitacion" [(ngModel)]="tipoHabitacionSeleccionado" name="tipoHabitacion">
-      <option value="" selected>--Seleccionar Tipo--</option>
-      <option *ngFor="let tipo of tiposHabitaciones" [value]="tipo.id">{{ tipo.name }}</option>
-    </select>
 
-    <button (click)="consultarDisponibilidad()">Consultar Disponibilidad</button>
-  </div>
-
-  <div class="results" *ngIf="habitacionesDisponibles.length > 0">
-    <h2>Resultados de la Consulta</h2>
-    <ul>
-      <li *ngFor="let room of habitacionesDisponibles">
-        Habitación {{ room.id }} (Tipo: {{getRoomType(room) }}) - Costo: {{ costoEstancia }}
-      </li>
-    </ul>
-  </div>
-
-  <div class="no-results" *ngIf=" habitacionesDisponibles.length === 0">
-    <p>No se encontraron habitaciones disponibles para las fechas seleccionadas.</p>
-  </div>
+  <div *ngIf="habitaciones.length > 0">
+    <table class="table"> 
+        <thead>
+            <tr>
+                <th>Número de habitación</th>   
+                <th>Tipo de habitación</th>                
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let room of habitaciones">
+                <td>{{room.number}}</td>  
+                <td>{{room.type_id}}</td>                
+            </tr>
+        </tbody>
+    </table>
 </div>
 
+  <div *ngIf="habitaciones.length === 0 && fechaInicio && fechaFin">
+    <p>No rooms available for the selected dates and type.</p>
+  </div>
+</div>-->
 
+
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Turri Adventure</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-lg-9 col-md-8">
+                <div class="container">
+                    <h1>Consultar Disponibilidad de Habitaciones </h1>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="fechaLlegada">Fecha de Llegada:</label>
+                                <input #fechaLlegadaInput
+                                    (input)="onInputChange('fechaLlegada', fechaLlegadaInput.value)" required
+                                    type="date" id="fechaLlegada" formControlName="fechaLlegada" class="form-control"
+                                    [min]="obtenerFechaActual()">
+                            </div>
+                            <div class="col-md-4">
+
+                                <label for="fechaSalida">Fecha de Salida:</label>
+                                <input #fechaSalidaInput (input)="onInputChange('fechaSalida', fechaSalidaInput.value)"
+                                    required type="date" id="fechaSalida" formControlName="fechaSalida"
+                                    class="form-control" [min]="fechaLlegada">
+                            </div>
+
+                            <div class="col-md-4">
+                              <label for="tipoHabitacion">Tipo de Habitación:</label>
+                              <input #tipoHabitacionInput
+                                type="text"
+                                (input)="onInputChange('tipoHabitacion', tipoHabitacionInput.value)"
+                                required
+                                id="tipoHabitacion"
+                                formControlName="tipoHabitacion"
+                                class="form-control"
+                              />
+                            </div>
+                        </div>
+
+                        <div *ngIf="mensaje" class="alert"
+                            [ngClass]="{'alert-success': !esError, 'alert-danger': esError}">
+                            {{ mensaje }}
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <button type="button" (click)="onSubmit()" class="btn btn-primary">Consultar </button>
+                            </div>
+                        </div>
+
+                        <div *ngIf="tablaVisible" class="row modal-body">
+                            <h4>Lista de Habitaciones</h4>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th class="table-dark">Número de Habitación</th>
+                                            <th class="table-dark">Tipo</th>
+                                            <th class="table-dark">Costo Estadía</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table-body">
+                                        <tr *ngFor="let habitacion of habitaciones">
+                                            <td>{{ habitacion.number }}</td>
+                                            <td>{{ obtenerNombreTipoHabitacion(habitacion.type_id) }}</td>
+                                            <td>{{ obtenerPrecioTipoHabitacion(habitacion.type_id) }}</td>
+                                          </tr>                                   
+                                    </tbody>
+                                </table>
+                                <div id="pagination" class="d-flex justify-content-center mt-3"></div>
+                            </div>
+                        </div>
+                                   
+                        
+                          
+                        
+
+
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
