@@ -68,4 +68,37 @@ export class ReservationsComponent {
   backToList(): void {
     this.selectedReservation = null;
   }
+
+  deleteReservation(id: number): void {
+    this.reservationService.deleteReservation(id).subscribe(
+      () => {
+        this.reservations = this.reservations.filter(r => r.id !== id);
+        this.reservationService.showMessage(true, 'Reserva eliminada correctamente');
+      },
+      error => {
+        console.error('Error eliminar reservacion', error);
+        this.reservationService.showMessage(false, 'Error eliminando la reserva');
+      }
+    );
+  }
+
+  imprimirReservaciones(): void {
+    const printContent = document.querySelector('.reservation-list')?.innerHTML;
+    const tableClone = document.querySelector('table')?.cloneNode(true) as HTMLElement;
+
+    if (tableClone) {
+      const buttons = tableClone.querySelectorAll('button');
+      buttons.forEach(button => button.remove());
+    }
+
+    const printWindow = window.open('', '', 'height=600,width=800');
+    if (printWindow) {
+      printWindow.document.write('<html><head><title>Reservaciones</title>');
+      printWindow.document.write('</head><body>');
+      printWindow.document.write(tableClone?.outerHTML || '');
+      printWindow.document.write('</body></html>');
+      printWindow.document.close();
+      printWindow.print();
+    }
+  }
 }

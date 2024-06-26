@@ -4,6 +4,9 @@
   </div>
 
   <div *ngIf="!processingRequest && !selectedReservation">
+    <div class="button-container">
+      <button (click)="imprimirReservaciones()">Imprimir Reservas</button>
+    </div>
     <table>
       <thead>
         <tr>
@@ -22,6 +25,7 @@
           <td>{{ getRoomType(reservation)}}</td>
           <td>
             <button (click)="viewDetails(reservation)">Ver detalles</button>
+            <button (click)="deleteReservation(reservation.id)">Eliminar</button>
           </td>
         </tr>
       </tbody>
@@ -33,7 +37,7 @@
       <button (click)="onPageChange(currentPage + 1)" [disabled]="reservations.length < pageSize">Siguiente</button>
     </div>
   </div>
-  
+
   <div *ngIf="selectedReservation">
     <h2>Detalles de la Reservación</h2>
     <button (click)="backToList()">Volver</button>

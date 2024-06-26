@@ -4,7 +4,6 @@ import { RoomType } from '../models/RoomType';
 import { Room } from '../models/Room';
 import { catchError, Observable } from 'rxjs';
 import { Reservation } from '../models/Reservation';
-import { TipoHabitacion } from '../models/season';
 
 
 @Injectable({

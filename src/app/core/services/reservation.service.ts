@@ -30,4 +30,16 @@ export class ReservationService {
     return this.http.get<Reservation[]>(`${this.url}?pageNumber=${pageNumber}&pageSize=${pageSize}`);
   }
 
+  deleteReservation(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}/${id}`);
+  }
+
+  showMessage(success: boolean, message: string): void {
+    if (success) {
+      this.msg.success(message);
+    } else {
+      this.msg.error(message);
+    }
+  }
+
 }
