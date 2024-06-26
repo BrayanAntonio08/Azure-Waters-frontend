@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Reservation } from '../models/Reservation';
 import { ToastrService } from 'ngx-toastr';
+import { Observable } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -23,4 +25,21 @@ export class ReservationService {
       }
     );
   }
+
+  getReservations(pageNumber: number, pageSize: number): Observable<Reservation[]> {
+    return this.http.get<Reservation[]>(`${this.url}?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+  }
+
+  deleteReservation(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}/${id}`);
+  }
+
+  showMessage(success: boolean, message: string): void {
+    if (success) {
+      this.msg.success(message);
+    } else {
+      this.msg.error(message);
+    }
+  }
+
 }
