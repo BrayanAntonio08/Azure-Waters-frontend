@@ -9,6 +9,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCloudArrowUp, faPen, faX } from '@fortawesome/free-solid-svg-icons';
 import { FacilitiesService } from '../../core/services/facilities.service';
 import { Facilidad } from '../../core/models/Facilities';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-page-edit',
@@ -42,7 +43,8 @@ export class PageEditComponent {
   constructor(
     private pageService: PageService, 
     private imgService: ImageService, 
-    private facilitiesService: FacilitiesService){
+    private facilitiesService: FacilitiesService,
+    private msg: ToastrService){
   }
 
   editPage(page: string){
@@ -114,11 +116,15 @@ export class PageEditComponent {
   }
 
   async saveChanges(){
+    if(this.pageInfo.texto === "<p><br></p>"){
+      this.msg.warning("Debe insertar algún contenido a la página");
+      return;
+    }
+
     this.pageInfo.imagenes = this.pageImg;
 
     if(this.editingPage == 'home'){
       //check if picture is from file
-      console.log(this.imgFiles);
       if(this.imgFiles.length > 0){
         //upload file to cloudinary
         let newImg = await this.imgService.upload(this.imgFiles[0].file)
@@ -140,7 +146,6 @@ export class PageEditComponent {
     }
 
     this.pageInfo.imagenes = this.pageImg;
-    console.log(this.pageImg)
     this.pageService.modifyPage(this.pageInfo)
   }
 

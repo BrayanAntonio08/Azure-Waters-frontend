@@ -46,7 +46,22 @@ export class RoomService {
 
   getRoom(): Observable<Room[]> {
     return this.http.get<Room[]>(`${this.url}/list`);
+  }
 
+  markActive(room:Room){
+    this.http.put(this.url+"/activa", room);
+  }
+
+  createRoom(room:Room){
+    return this.http.post(this.url+"/create", room);
+  }
+
+  updateRoom(id:number, room:Room){
+    return this.http.put(this.url+"/update/"+id, room);
+  }
+
+  delete(id:number){
+    return this.http.delete(this.url+"/delete/"+id);
   }
 
   getRoomTypes(): Observable<RoomType[]> {
@@ -95,6 +110,7 @@ export class RoomService {
     console.log('service consultar', this.http.get<Room[]>(`${this.url}/disponibilidad`,{params}));
     return this.http.get<Room[]>(`${this.url}/disponibilidad`,{params});
   }
+
 
   /*ConsultarDisponibilidadHabitaciones(fecha_inicio: string, fecha_fin: string, id_tipo: number): Observable<Room[]> {
     return this.http.get<Room[]>(`${this.apiUrl}/HabitacionConsultarDisponibilidadHabitaciones`, {
