@@ -41,6 +41,7 @@ export class SeasonManagementComponent implements OnInit {
   ]
   periods: Period[] = [];
   errorMsg = "";
+  changed = false;
 
   constructor(private seasonService: SeasonService, private msg: ToastrService) { }
 
@@ -71,8 +72,8 @@ export class SeasonManagementComponent implements OnInit {
     );
   }
 
-  createSeasons() {
-    if(this.temporadas.some(temporada => temporada.fechaFin == "NaN-NaN" || temporada.fechaInicio == "NaN-NaN")) return
+  createSeasons() :boolean{
+    if(this.temporadas.some(temporada => temporada.fechaFin == "NaN-NaN" || temporada.fechaInicio == "NaN-NaN")) return false;
 
 
     this.periods = [];
@@ -142,7 +143,7 @@ export class SeasonManagementComponent implements OnInit {
     }
     this.periods.push(periodFinal);
 
-    console.log(this.periods);
+    return true;
   }
 
   updateDates(){
@@ -178,6 +179,10 @@ export class SeasonManagementComponent implements OnInit {
     this.createSeasons()
   }
 
+  changeDate(){
+    this.updateDates();
+    this.changed = this.createSeasons()
+  }
   eliminarTemporada(id: number): void {
     
     this.seasonService.deleteTemporada(id).subscribe(
@@ -256,31 +261,15 @@ export class SeasonManagementComponent implements OnInit {
     })
   }
 
-  // agregarActualizarTemporada(): void {
-  //   if (this.nuevaTemporada.idTemporada === 0) {
-  //     this.seasonService.addTemporada(this.nuevaTemporada).subscribe(
-  //       () => {
-  //         this.closeAddSeasonModal();
-  //         this.getTemporada();
-  //         this.nuevaTemporada = { idTemporada: 0, fechaInicio: null, fechaFin: null, descuento: null, idTipo: 0 };
-  //       },
-  //       (error) => {
-  //         console.error('Error al agregar la temporada:', error);
-  //       }
-  //     );
-  //   } else {
-  //     this.seasonService.updateTemporada(this.nuevaTemporada).subscribe(
-  //       () => {
-  //         this.closeAddSeasonModal();
-  //         this.getTemporada();
-  //         this.nuevaTemporada = { idTemporada: 0, fechaInicio: null, fechaFin: null, descuento: null, idTipo: 0 };
-  //       },
-  //       (error) => {
-  //         console.error('Error al actualizar la temporada:', error);
-  //       }
-  //     );
-  //   }
-  // }
+  updateValues(){
+    this.seasonService.updateAll(this.temporadas).then(value => {
+      this.closeAddSeasonModal();
+      this.msg.success("Modificación completa correctamente");
+
+      this.getTemporada();
+      this.changed = false;
+    })
+  }
 }
 
 
