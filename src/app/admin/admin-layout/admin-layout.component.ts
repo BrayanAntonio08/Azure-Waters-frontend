@@ -51,7 +51,7 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
 export class AdminLayoutComponent {
 
   user: string = "";
-  constructor(private loginService: AuthService, private router: Router, private msg: ToastrService) { 
+  constructor(private loginService: AuthService, private router: Router, private msg: ToastrService ) { 
     let value = sessionStorage.getItem("usuario");
     this.user = value? value: "";
   }
