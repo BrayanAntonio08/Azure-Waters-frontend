@@ -84,23 +84,14 @@ export class ReservationsComponent {
     );
   }
 
-  imprimirReservaciones(): void {
-    const printContent = document.querySelector('.reservation-list')?.innerHTML;
-    const tableClone = document.querySelector('table')?.cloneNode(true) as HTMLElement;
-
-    if (tableClone) {
-      const buttons = tableClone.querySelectorAll('button');
-      buttons.forEach(button => button.remove());
-    }
-
-    const printWindow = window.open('', '', 'height=600,width=800');
-    if (printWindow) {
-      printWindow.document.write('<html><head><title>Reservaciones</title>');
-      printWindow.document.write('</head><body>');
-      printWindow.document.write(tableClone?.outerHTML || '');
-      printWindow.document.write('</body></html>');
-      printWindow.document.close();
-      printWindow.print();
+  imprimirDetalles(): void {
+    const printContents = document.querySelector('.reservation-details')?.innerHTML;
+    if (printContents) {
+      const originalContents = document.body.innerHTML;
+      document.body.innerHTML = printContents;
+      window.print();
+      document.body.innerHTML = originalContents;
+      location.reload();
     }
   }
 }

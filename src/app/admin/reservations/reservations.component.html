@@ -5,7 +5,7 @@
 
   <div *ngIf="!processingRequest && !selectedReservation">
     <div class="button-container">
-      <button (click)="imprimirReservaciones()">Imprimir Reservas</button>
+      <!-- <button (click)="imprimirReservaciones()">Imprimir Reservas</button> -->
     </div>
     <table>
       <thead>
@@ -41,6 +41,7 @@
   <div *ngIf="selectedReservation">
     <h2>Detalles de la Reservación</h2>
     <button (click)="backToList()">Volver</button>
+    <button (click)="imprimirDetalles()">Imprimir</button>
     <div class="reservation-details">
       <p><strong>Fecha de Inicio:</strong> {{ selectedReservation.arriving | date }}</p>
       <p><strong>Fecha de Fin:</strong> {{ selectedReservation.departing | date }}</p>
