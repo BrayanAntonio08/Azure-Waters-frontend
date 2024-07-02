@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Reservation } from '../../core/models/Reservation';
 import { ReservationService } from '../../core/services/reservation.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 
@@ -21,7 +22,7 @@ export class ReservationsComponent {
   processingRequest: boolean = false;
   selectedReservation: Reservation | null = null;
 
-  constructor(private reservationService: ReservationService) {}
+  constructor(private reservationService: ReservationService, private msg: ToastrService) {}
 
   ngOnInit(): void {
     this.loadReservations();
@@ -33,6 +34,7 @@ export class ReservationsComponent {
         this.reservations = reservations;
       },
       error => {
+        this.msg.error("Ha ocurrido un error al cargar las reservaciones");
         console.error('Error fetching reservations', error);
       }
     );

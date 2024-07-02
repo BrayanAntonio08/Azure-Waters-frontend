@@ -173,8 +173,12 @@ export class PageEditComponent {
 
  async saveFacility(){
     if(this.facilityInfo){
+      if(this.facilityInfo.texto === "<p><br></p>"){
+        this.msg.warning("Debe insertar algún contenido a la facilidad");
+        return;
+      }
+
       this.facilityInfo = await this.facilitiesService.updateFacility(this.facilityInfo);
-      
     }
   }
 }
