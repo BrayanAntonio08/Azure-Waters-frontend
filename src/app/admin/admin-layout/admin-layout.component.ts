@@ -3,6 +3,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { AdminNavbarComponent } from '../admin-navbar/admin-navbar.component';
 import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-admin-layout',
@@ -50,7 +51,7 @@ import { Router } from '@angular/router';
 export class AdminLayoutComponent {
 
   user: string = "";
-  constructor(private loginService: AuthService, private router: Router) { 
+  constructor(private loginService: AuthService, private router: Router, private msg: ToastrService) { 
     let value = sessionStorage.getItem("usuario");
     this.user = value? value: "";
   }
@@ -60,6 +61,7 @@ export class AdminLayoutComponent {
       this.loginService.logout();
       this.loginService.active = false;
       console.log("Se cerró la sesión correctamente: " + this.loginService.active);
+      this.msg.success('Se cerró la sesión correctamente');
       this.router.navigate(['/auth']);
     } else {
       console.log("No ha iniciado sesión.");
