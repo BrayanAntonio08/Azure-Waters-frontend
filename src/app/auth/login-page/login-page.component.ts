@@ -33,6 +33,7 @@ export class LoginPageComponent implements OnInit {
   buttonInicioSesion(): void {
     if (this.nombre.trim().length === 0 || this.contra.trim().length === 0) {
       this.error = true;
+      this.msg.warning('No se permite datos en blanco');
       return;
     }
     this.error = false;
@@ -51,6 +52,7 @@ export class LoginPageComponent implements OnInit {
           sessionStorage.setItem('id', dataLogin.ID.toString());
           sessionStorage.setItem('usuario', dataLogin.usuario);
           this.loginService.active = true;
+          this.msg.success("Inicio de sesión exitoso");
           console.log("Inicio de sesión exitoso: " + this.loginService.active);
           this.router.navigate(['/admin']);
         } else {
