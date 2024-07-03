@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { ImageService } from '../../core/services/image.service';
 import { Image } from '../../core/models/Image';
 import { CommonModule } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-rooms',
@@ -45,7 +46,7 @@ export class RoomsComponent {
     checking: true
   };
 
-constructor(private roomService: RoomService, private imageService: ImageService) {
+  constructor(private roomService: RoomService, private imageService: ImageService, private msg:ToastrService) {
     this.loadData();
   } //fin constructor
 
@@ -67,6 +68,7 @@ constructor(private roomService: RoomService, private imageService: ImageService
   openUpdateRoomTypeForm() {
     let temp = this.roomTypes.find(item => item.id === this.activeRoomType);
     this.editingRoomType = temp ? temp : this.editingRoomType;
+    this.roomTypeImage = temp?.image? temp.image: new Image();
     this.state = "editingRoomType";
   }
 
@@ -81,13 +83,30 @@ constructor(private roomService: RoomService, private imageService: ImageService
     });
   }
 
-  updateRoomType() {
+  async updateRoomType() {
+    //validar campos
+    if(this.editingRoomType.name.length === 0 || this.editingRoomType.description.length === 0 || this.editingRoomType.price.toString().length === 0){
+      this.msg.warning("Debe ingresar datos en todos los campos");
+      return;
+    }
+    //validar dato numerico
+    if(isNaN(parseFloat(this.editingRoomType.price.toString()))){
+      this.msg.warning("El precio debe ser un valor numérico");
+      return;
+    }
+    // validar la imagen
+    if(this.roomTypeImage.id === 0){
+      console.log("nueva imagern");
+      if(!await this.uploadImage()){
+        return;
+      }
+    }
     this.roomService.UpdateRoomType(this.editingRoomType).then(() => {
-      console.log("Tipo de habitación actualizado correctamente.");
+      this.msg.success("Tipo de habitación actualizado correctamente.");
       this.cancelUpdateRoomType();
       this.roomService.ListRoomTypes();
     }).catch(error => {
-      console.error("Error al actualizar tipo de habitación:", error);
+      this.msg.error("Error al actualizar tipo de habitación");
     });
   }
 
@@ -95,23 +114,26 @@ constructor(private roomService: RoomService, private imageService: ImageService
     this.roomService.DeleteRoomType(this.activeRoomType);
   }
 
-  uploadImage() {
-    if (this.fileImg) {
-      console.log(this.fileImg);
-
-      let imagen: Image = new Image();
-      this.imageService.upload(this.fileImg).then((value) => {
-        imagen = value;
-        console.log(imagen);
-      });
-    } else {
-      alert("No ha subido la imagen");
-    }
+  uploadImage() : Promise<boolean>{
+    return new Promise<boolean>((resolve,reject)=>{
+      if (this.fileImg) {
+        this.imageService.upload(this.fileImg).then((value) => {
+          this.editingRoomType.image = value;
+          resolve(true);
+        }).catch((err)=>{
+          resolve(false);
+        });
+      } else {
+        this.msg.warning("Debe ingresar un archivo valido");
+        resolve(false);
+      }
+    });
   }
 
   selectFile(event: any) {
     this.fileImg = event.target.files[0];
     if (this.fileImg) {
+      this.roomTypeImage = new Image();
       const reader = new FileReader();
       reader.onload = (e: any) => {
         this.roomTypeImage.url = e.target.result;
@@ -127,10 +149,11 @@ constructor(private roomService: RoomService, private imageService: ImageService
 
   deleteRoom(id: number) {
     this.roomService.delete(id).subscribe(() => {
-      console.log("Habitación eliminada correctamente.");
+      this.msg.success("Habitación eliminada correctamente.");
       this.rooms = this.rooms.filter(room => room.id !== id);
       this.displayRooms = this.displayRooms.filter(room => room.id !== id);
     }, error => {
+      this.msg.error("Error al eliminar la habitación");
       console.error("Error al eliminar la habitación:", error);
     });
   }
@@ -150,9 +173,14 @@ constructor(private roomService: RoomService, private imageService: ImageService
   }
 
   agregarHabitacion(): void {
+    // validar el numero
+    if(!this.nuevaHabitacion.number || this.nuevaHabitacion.number.toString().length === 0 || isNaN(parseFloat(this.nuevaHabitacion.number.toString()))){
+      this.msg.warning("Procure insertar un valor válido para el número de habitación");
+      return;
+    }
     this.roomService.createRoom(this.nuevaHabitacion).subscribe(
       () => {
-        console.log("Habitación creada correctamente.");
+        this.msg.success("Habitación creada correctamente.");
         this.closeAddRoomModal();
         this.getRooms();
         this.nuevaHabitacion = {
@@ -165,6 +193,7 @@ constructor(private roomService: RoomService, private imageService: ImageService
         };
       },
       (error) => {
+        this.msg.error("Error al crear la habitación");
         console.error("Error al crear la habitación:", error);
       }
     );
@@ -186,14 +215,19 @@ constructor(private roomService: RoomService, private imageService: ImageService
   }
 
   actualizarHabitacion(): void {
+    // validar el numero
+    if(!this.editingRoom.number || this.editingRoom.number.toString().length === 0 || isNaN(parseFloat(this.editingRoom.number.toString()))){
+      this.msg.warning("Procure insertar un valor válido para el número de habitación");
+      return;
+    }
     this.roomService.updateRoom(this.editingRoom.id, this.editingRoom).subscribe(
       () => {
-        console.log("Habitación actualizada correctamente.");
+        this.msg.success("Habitación actualizada correctamente.");
         this.closeEditRoomModal();
         this.getRooms();
       },
       (error) => {
-        console.error("Error al actualizar la habitación:", error);
+        this.msg.error("Error al actualizar la habitación");
       }
     );
   }

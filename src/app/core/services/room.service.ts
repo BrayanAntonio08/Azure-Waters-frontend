@@ -4,6 +4,7 @@ import { RoomType } from '../models/RoomType';
 import { Room } from '../models/Room';
 import { catchError, Observable } from 'rxjs';
 import { Reservation } from '../models/Reservation';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Injectable({
@@ -13,13 +14,19 @@ export class RoomService {
 
   private url: string = "";
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private msg: ToastrService) {
     this.url = "http://localhost:7119/api/Habitacion";
   }
 
   ListRoomTypes(): Promise<RoomType[]> {
     return new Promise<RoomType[]>((resolve, reject) => {
-      this.http.get<RoomType[]>(`${this.url}/tipos`).subscribe((data: RoomType[]) => {
+      this.http.get<RoomType[]>(`${this.url}/tipos`).pipe(
+        catchError((err)=>{
+          this.msg.error("Ha ocurrido un error al cargar los datos de las habitaciones");
+          reject(err);
+          throw err;
+        })
+      ).subscribe((data: RoomType[]) => {
         resolve(data);
       });
     });
@@ -27,7 +34,13 @@ export class RoomService {
 
   ListRooms(): Promise<Room[]> {
     return new Promise<Room[]>((resolve, reject) => {
-      this.http.get<Room[]>(`${this.url}/list`).subscribe((data: Room[]) => {
+      this.http.get<Room[]>(`${this.url}/list`).pipe(
+        catchError((err)=>{
+          this.msg.error("Ha ocurrido un error al cargar las habitaciones");
+          reject(err);
+          throw err;
+        })
+      ).subscribe((data: Room[]) => {
         resolve(data);
       });
     });

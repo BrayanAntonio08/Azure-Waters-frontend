@@ -80,15 +80,15 @@
             <textarea rows="6" class="form-control" [(ngModel)]="editingRoomType.description"></textarea>
         </div>
         <div class="mb-3 row">
-            <!-- <div class="col-8 col-md-3">
+            <div class="col-8 col-md-3">
                 <p>Imagen Actual</p>
                 <div>
                     <img [src]="roomTypeImage.url" alt="" class="w-100">
                 </div>
-            </div> -->
+            </div>
             <div class="col-10 col-md-9">
                 <label class="form-label">Subir nueva imagen</label>
-                <input type="text" class="form-control"  [(ngModel)]="editingRoomType.imagenId">
+                <input type="file" class="form-control" (change)="selectFile($event)">
             </div>
         </div>
 

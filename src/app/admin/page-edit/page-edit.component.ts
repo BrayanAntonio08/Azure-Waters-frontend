@@ -177,7 +177,6 @@ export class PageEditComponent {
         this.msg.warning("Debe insertar algún contenido a la facilidad");
         return;
       }
-
       this.facilityInfo = await this.facilitiesService.updateFacility(this.facilityInfo);
     }
   }

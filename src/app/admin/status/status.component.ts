@@ -7,6 +7,7 @@ import { NgIf } from '@angular/common';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { RoomType } from '../../core/models/RoomType';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -31,7 +32,7 @@ export class StatusComponent {
   rooms: Room[] = [];
   pdfPreviewUrl: string | null = null;
 
-  constructor(private roomService: RoomService) { }
+  constructor(private roomService: RoomService, private msg:ToastrService) { }
 
   ngOnInit(): void {
     this.getRoom();
@@ -43,6 +44,7 @@ export class StatusComponent {
         this.rooms = rooms;
       },
       (error) => {
+        this.msg.error('Error al obtener las habitaciones');
         console.error('Error al obtener las habitaciones:', error);
       }
     );
