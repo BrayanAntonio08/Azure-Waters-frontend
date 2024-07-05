@@ -1,43 +1,82 @@
-.container {
-  max-width: 600px; /* Optional: Set a maximum width for the form */
-  margin: 0 auto; /* Optional: Center the form horizontally */
+/* src/app/components/consulta-habitacion/consulta-habitacion.component.css */
+.consulta-container {
+  max-width: 600px;
+  margin: 0 auto;
   padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.consulta-form {
+  display: flex;
+  flex-direction: column;
 }
 
 .form-group {
   margin-bottom: 15px;
 }
 
-.form-control {
+.form-group label {
   display: block;
-  width: 100%;
-  height: calc(1.5em + 0.75rem + 2px); /* Adjust height as needed */
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #495057;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  margin-bottom: 5px;
+  font-weight: bold;
 }
 
-.btn-primary {
+.form-control {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.btn-submit {
+  padding: 10px 15px;
   color: #fff;
   background-color: #007bff;
-  border-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
 }
 
-/* Add styles for table (optional) */
-table {
+.btn-submit:hover {
+  background-color: #0056b3;
+}
+
+.result-container {
+  margin-top: 20px;
+}
+
+.result-table {
   width: 100%;
   border-collapse: collapse;
+  margin-top: 10px;
 }
 
-th, td {
-  padding: 10px;
+.result-table th,
+.result-table td {
   border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
 }
-  
+
+.result-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.result-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.result-table tr:hover {
+  background-color: #ddd;
+}
+
+h2{
+  text-align: center;
+}
