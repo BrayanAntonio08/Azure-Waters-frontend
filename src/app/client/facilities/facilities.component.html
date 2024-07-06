@@ -6,7 +6,7 @@
   <h1>Facilidades</h1>
 
   <div class="container">
-    <div class="grid-item" *ngFor="let facilidad of facilidades">
+    <div class="facility" *ngFor="let facilidad of facilidades">
       <div class="image-description">
         <img [src]="facilidad.imagen?.url" alt="Image">
         <div class="description" [innerHTML]="facilidad.texto">
