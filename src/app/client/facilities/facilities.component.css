@@ -1,5 +1,30 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  position: relative;
+}
+.background-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/assets/img/hotel.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.2; /* Transparencia de la imagen de fondo */
+  z-index: -1; /* Asegura que esté detrás de otros elementos */
+  pointer-events: none; /* Evita que interfiera con la interacción de otros elementos */
+}
+.content {
+  position: relative;
+  z-index: 1;
+  padding: 1rem;
+  border-radius: 5px;
+}
+
 * {
-  padding: 10px;
+  padding: 5px;
 }
 
 .image-description {
@@ -17,4 +42,12 @@
 
 .description {
   text-align: justify;
+  font-size: 110%;
+}
+
+.facility{
+  background-color: rgba(255,255,255,0.8);
+  border-radius: 10px;
+  margin: 10px;
+
 }

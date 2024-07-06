@@ -33,6 +33,7 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
     </main>
   `,
   styles: `
+  
   header{
     width: 100%;
     background-color: rgb(50,160,250);
