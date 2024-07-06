@@ -34,19 +34,26 @@ import { AdvertisementComponent } from '../advertisement/advertisement.component
     </main>
   `,
   styles: `
-  header{
+    header{
     width: 100%;
-    background-color: rgb(50,160,250);
-    padding: 20px;
+    background-color: rgb(70,110,110);
+    padding: 30px;
     margin-bottom: 20px;
     display: flex;
+    }
 
     img{
       width: 45px;
       height: 45px;
       margin-right:30px;
     }
-  }
+
+    .text-white {
+      text-decoration: none;
+      color: #0056b3; 
+      font-weight: bold;
+      font-size: 2.5rem;
+    }
   `,
 })
 export class ClientLayoutComponent {}
