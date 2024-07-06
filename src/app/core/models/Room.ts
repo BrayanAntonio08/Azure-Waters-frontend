@@ -7,6 +7,12 @@ export interface Room{
     checking: boolean ;
 }
 
+export interface RoomDto{
+    numero: number;
+    tipoHabitacion: string;
+    costoEstadia: number;
+}
+
 export class ReservationRoom{
     id: number = 0;
     number: number = 0;

@@ -39,6 +39,7 @@ export class StatusComponent {
   }
 
   getRoom(): void {
+
     this.roomService.getRoom().subscribe(
       (rooms: Room[]) => {
         this.rooms = rooms;
@@ -47,6 +48,7 @@ export class StatusComponent {
         this.msg.error('Error al obtener las habitaciones');
         console.error('Error al obtener las habitaciones:', error);
       }
+
     );
   }
 

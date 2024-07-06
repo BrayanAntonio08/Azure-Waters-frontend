@@ -233,6 +233,7 @@ export class RoomsComponent {
   }
 
   getRooms(): void {
+    
     this.roomService.ListRooms().then((value) => {
       this.rooms = value;
       this.displayRooms = this.rooms.filter(x => x.type_id === this.activeRoomType);

@@ -1,10 +1,12 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { RoomType } from '../models/RoomType';
-import { Room } from '../models/Room';
-import { catchError, Observable } from 'rxjs';
+import { Room, RoomDto } from '../models/Room';
 import { Reservation } from '../models/Reservation';
 import { ToastrService } from 'ngx-toastr';
+import { Observable, throwError } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
+
 
 
 @Injectable({
@@ -86,19 +88,6 @@ export class RoomService {
     return this.http.get<RoomType[]>(`${this.url}/list`);
   }
 
-
-  //NUEVA PARA LA DISPONIBILIDAD DE HABITACIONES
-  getDisponibilidad(fechaInicio: string, fechaFin: string, idTipo: number): Observable<Room[]> {
-    console.log('fecha', fechaInicio, ' a ', fechaFin, 'tipo ', idTipo);
-
-    // Construir la URL con los parámetros directamente
-    const url = `${this.url}/disponibilidad?fecha_inicio=${fechaInicio}&fecha_final=${fechaFin}&id_tipo=${idTipo}`;
-
-    console.log('DISPONIBILIDAD Service', this.http.get<Room[]>(url));
-
-    return this.http.get<Room[]>(url);
-}
-
   checkRoom(request: Reservation): Promise<any> {
     return new Promise((resolve) => {
       this.http.post<any>(`${this.url}/revisar`, request).
@@ -114,26 +103,18 @@ export class RoomService {
   finishRevision(id_room:number){
     this.http.delete(`${this.url}/liberar/${id_room}`).subscribe(res => console.log(res));
   }
-
-  ConsultarDisponibilidadHabitaciones(fecha_inicio:string , fecha_fin:string, id_tipo:number): Observable<Room[]> {
-    const params= new HttpParams()
-    .set('fecha_inicio', fecha_inicio)
-    .set('fecha_fin', fecha_fin)
-    .set('id_tipo', id_tipo.toString());
-    console.log('service consultar', this.http.get<Room[]>(`${this.url}/disponibilidad`,{params}));
-    return this.http.get<Room[]>(`${this.url}/disponibilidad`,{params});
-  }
-
-
-  /*ConsultarDisponibilidadHabitaciones(fecha_inicio: string, fecha_fin: string, id_tipo: number): Observable<Room[]> {
-    return this.http.get<Room[]>(`${this.apiUrl}/HabitacionConsultarDisponibilidadHabitaciones`, {
-      params: {
-        fecha_inicio,
-        fecha_fin,
-        id_tipo: id_tipo.toString()
+ 
+    consultarDisponibilidad(fechaInicio: string, fechaFin: string, idTipoHabitacion?: number): Observable<RoomDto[]> {
+      let params = new HttpParams()
+        .set('fechaInicio', fechaInicio)
+        .set('fechaFin', fechaFin);
+      
+      if (idTipoHabitacion !== undefined) {
+        params = params.set('idTipoHabitacion', idTipoHabitacion.toString());
       }
-    });
-  }*/
-}
+  
+      return this.http.get<RoomDto[]>(`${this.url}/disponibilidades`, { params });
+    }
+  }
 
 
